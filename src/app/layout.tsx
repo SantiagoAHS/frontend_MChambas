@@ -24,10 +24,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <header style={{ padding: '1rem', borderBottom: '1px solid #ccc' }}>
+          <nav style={{ display: 'flex', gap: '1rem' }}>
+            <a href="/">Inicio</a>
+            <a href="/about">Acerca de</a>
+            <a href="/contact">Contacto</a>
+          </nav>
+        </header>
+
+        <main style={{ minHeight: '80vh', padding: '2rem' }}>
+          {children}
+        </main>
+
+        <footer style={{ padding: '1rem', borderTop: '1px solid #ccc', textAlign: 'center' }}>
+          <small>© 2025 Mi Sitio</small>
+        </footer>
       </body>
     </html>
   );

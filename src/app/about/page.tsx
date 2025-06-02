@@ -1,3 +1,3 @@
 export default function AboutPage() {
-  return <h1>Página Home</h1>;
+  return <h1>Página About</h1>;
 }
