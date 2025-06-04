@@ -1,5 +1,5 @@
-// app/contact/page.tsx
-export default function ContactPage() {
+// app/help/page.tsx
+export default function HelpPage() {
   return (
     <section className="max-w-3xl mx-auto">
       <h2 className="text-3xl font-bold mb-4">Página de Contacto de MiProyecto</h2>
