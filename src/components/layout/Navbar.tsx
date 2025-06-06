@@ -1,10 +1,24 @@
 "use client";
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // 👈 se agrega esto
+import { usePathname } from "next/navigation";
+import { UserCircle } from "lucide-react";
 
 const Navbar: React.FC = () => {
-  const pathname = usePathname(); // 👈 obtener la ruta actual
+  const pathname = usePathname();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  // Cerrar menú si se hace clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <nav className="bg-white border-b border-gray-200 shadow-sm">
@@ -12,14 +26,12 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <Link href="/">
-            <span className="text-red-600 font-bold text-lg cursor-pointer">
-              MChambas
-            </span>
+            <span className="text-red-600 font-bold text-lg cursor-pointer">MChambas</span>
           </Link>
         </div>
 
         {/* Menú principal */}
-        <ul className="flex space-x-6 text-sm font-medium text-gray-700">
+        <ul className="flex space-x-6 text-sm font-medium text-gray-700 items-center">
           <li>
             <Link
               href="/offers"
@@ -37,7 +49,7 @@ const Navbar: React.FC = () => {
                 pathname === "/services" ? "text-orange-500 border-b-2 border-orange-500 pb-1" : ""
               }`}
             >
-              servicios
+              Servicios
             </Link>
           </li>
           <li>
@@ -79,6 +91,40 @@ const Navbar: React.FC = () => {
             >
               Contacto
             </Link>
+          </li>
+
+        {/* Inicio de sesión y Registro */}
+          <li className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="text-gray-700 hover:text-red-600 transition"
+              aria-label="Cuenta"
+            >
+              <UserCircle className="w-7 h-7" />
+            </button>
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 shadow-md rounded-md z-50">
+                <Link
+                  href="/login"
+                  className={`block px-4 py-2 text-sm hover:bg-gray-100 ${
+                    pathname === "/login" ? "text-orange-500" : "text-gray-700"
+                  }`}
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Iniciar sesión
+                </Link>
+                <Link
+                  href="/register"
+                  className={`block px-4 py-2 text-sm hover:bg-gray-100 ${
+                    pathname === "/register" ? "text-orange-500" : "text-gray-700"
+                  }`}
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Registrarse
+                </Link>
+              </div>
+            )}
           </li>
         </ul>
       </div>
