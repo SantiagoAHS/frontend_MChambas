@@ -1,16 +1,13 @@
+// components/layouts/UserLayout.tsx
 "use client";
 import React from "react";
-import Navbar from "@/components/layout/Navbar";
+import Sidebar from "@/components/sidebar/Sidebar";
 
-export default function UserLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function UserLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-white min-h-screen text-gray-800">
-      <main className="pt-4 px-4">{children}</main>
-      {/* <Footer /> */} {/* Footer import and usage commented out because Footer module does not exist */}
+    <div className="min-h-screen flex bg-gray-100">
+      <Sidebar role="user" />
+      <main className="flex-1 p-8">{children}</main>
     </div>
   );
 }
