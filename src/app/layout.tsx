@@ -3,6 +3,7 @@ import "../styles/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
+import ChatPopup from "./chat/page"; 
 
 export const metadata = {
   title: "MiProyecto",
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
+        <ChatPopup />
       </body>
     </html>
   );
