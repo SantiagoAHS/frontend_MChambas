@@ -29,7 +29,7 @@ const ChatPopup: React.FC = () => {
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "Gracias por tu mensaje 😊" },
+        { sender: "bot", text: "Tu madre 😊" },
       ]);
     }, 800);
   };
@@ -129,8 +129,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: 14,
     fontSize: 24,
     borderRadius: "50%",
-    border: "none",
-    backgroundColor: "#0084ff",
+    border: "2px solid #ff6600",
+    backgroundColor: "#fff",
     color: "#fff",
     cursor: "pointer",
     boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
@@ -151,7 +151,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     maxWidth: "80%",
   },
   userMsg: {
-    backgroundColor: "#0084ff",
+    backgroundColor: "#ff6600",
     color: "#fff",
     padding: "8px 12px",
     borderRadius: 12,
