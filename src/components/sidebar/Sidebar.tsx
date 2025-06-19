@@ -21,8 +21,9 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
         { href: "/admin/settings", label: "Configuración" },
       ]
     : [
-        { href: "/user/profile", label: "Inicio" },
-        { href: "/user/orders", label: "Mis pedidos" },
+        { href: "/user", label: "Inicio" },
+        { href: "/myorders", label: "Mis Compras" },
+        { href: "/chat", label: "Mis Chats" },
         { href: "/user/settings", label: "Configuración" },
       ];
 
