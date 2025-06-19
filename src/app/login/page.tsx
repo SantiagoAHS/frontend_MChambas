@@ -1,15 +1,51 @@
 "use client";
-import React, { useState } from "react";
+import React, { JSX, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Email:", email, "Password:", password);
-  };
+export default function LoginPage(): JSX.Element {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  e.preventDefault();
+  setError("");
+
+  try {
+    console.log("Payload enviado:", JSON.stringify({ email, password }));
+
+    const res = await fetch("http://localhost:8000/api/user/login/", {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify({ email: email.trim(), password }),
+    });
+
+    console.log("Respuesta status:", res.status);
+    const data = await res.json();
+    console.log("Respuesta data:", data);
+
+    if (!res.ok) {
+      setError(data.error || "Error en el inicio de sesión");
+      return;
+    }
+
+    console.log("Token recibido:", data.token);
+    localStorage.setItem("token", data.token);
+    console.log("Token guardado en localStorage:", localStorage.getItem("token"));
+    
+    alert("¡Inicio de sesión exitoso!");
+    router.push("/user");
+
+  } catch (err) {
+    setError("Error de conexión con el servidor");
+  }
+};
 
   return (
     <main className="w-screen h-screen flex items-center justify-center bg-white">
@@ -62,6 +98,8 @@ export default function LoginPage() {
             Iniciar sesión
           </button>
         </form>
+
+        {error && <p className="mt-4 text-red-600 text-center">{error}</p>}
 
         <p className="mt-6 text-center text-sm text-gray-600">
           ¿No tienes una cuenta?{" "}
