@@ -1,10 +1,9 @@
-// components/layouts/UserLayout.tsx
 "use client";
+import UserServices from "@/components/services/UserServices";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { UserCircleIcon, PhoneIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
-
 
 export default function UserLayout({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<{ email: string; nombre: string; telefono: string; avatar: string | null } | null>(null);
@@ -16,7 +15,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
       const token = localStorage.getItem("token");
 
       if (!token) {
-        router.push("/login"); // Si no hay token, redirige al login
+        router.push("/login");
         return;
       }
 
@@ -31,7 +30,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
           const data = await res.json();
           setProfile(data);
         } else {
-          localStorage.removeItem("token"); // Token inválido, lo eliminamos
+          localStorage.removeItem("token");
           router.push("/login");
         }
       } catch (error) {
@@ -84,9 +83,13 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
           </div>
         )}
 
+        <div className="mb-10">
+          <h1 className="text-3xl font-bold mb-6">Mis Servicios</h1>
+          <UserServices />
+        </div>
+
         {children}
       </main>
     </div>
   );
-
 }

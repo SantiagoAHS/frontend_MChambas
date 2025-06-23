@@ -1,101 +1,30 @@
-import { Search, Filter, Grid, List } from "lucide-react"
-import SidebarFilters from "@/components/services/Sidebarfilter"
-import ServicesGrid from "@/components/services/Servicesgrid"
+"use client";
+import { useEffect, useState } from "react";
+import { Search, Filter, Grid, List } from "lucide-react";
+import SidebarFilters from "@/components/services/Sidebarfilter";
+import ServicesGrid from "@/components/services/Servicesgrid";
 
-const services = [
-  {
-    id: 1,
-    title: "Servicio de Plomería",
-    provider: "Juan Pérez",
-    avatar: "",
-    image: "",
-    verified: true,
-    description: "Soluciono problemas de plomería a domicilio.",
-    rating: 4.8,
-    reviews: 20,
-    location: "Ciudad de México",
-    responseTime: "1 hora",
-    price: "$20,000"
-  },
-  {
-    id: 2,
-    title: "Plomería Residencial y Comercial",
-    provider: "María González",
-    avatar: "/placeholder.svg?height=40&width=40",
-    rating: 4.9,
-    reviews: 89,
-    price: "Desde $15.000",
-    location: "Las Condes",
-    category: "Plomería",
-    image: "/placeholder.svg?height=200&width=300",
-    verified: true,
-    responseTime: "1 hora",
-    description: "Instalación y reparación de tuberías, grifos, inodoros. Servicio de emergencia 24/7.",
-  },
-  {
-    id: 3,
-    title: "Instalaciones Eléctricas Certificadas",
-    provider: "Juan Pérez",
-    avatar: "/placeholder.svg?height=40&width=40",
-    rating: 4.7,
-    reviews: 156,
-    price: "Desde $20.000",
-    location: "Providencia",
-    category: "Electricidad",
-    image: "/placeholder.svg?height=200&width=300",
-    verified: true,
-    responseTime: "3 horas",
-    description: "Instalaciones eléctricas residenciales y comerciales. Certificación SEC incluida.",
-  },
-  {
-    id: 4,
-    title: "Carpintería y Muebles a Medida",
-    provider: "Roberto Silva",
-    avatar: "/placeholder.svg?height=40&width=40",
-    rating: 4.6,
-    reviews: 73,
-    price: "Desde $30.000",
-    location: "Ñuñoa",
-    category: "Carpintería",
-    image: "/placeholder.svg?height=200&width=300",
-    verified: false,
-    responseTime: "4 horas",
-    description: "Fabricación de muebles personalizados, reparación de puertas, ventanas y trabajos en madera.",
-  },
-  {
-    id: 5,
-    title: "Limpieza Profunda de Hogar",
-    provider: "Ana Martínez",
-    avatar: "/placeholder.svg?height=40&width=40",
-    rating: 4.9,
-    reviews: 203,
-    price: "Desde $18.000",
-    location: "Maipú",
-    category: "Limpieza",
-    image: "/placeholder.svg?height=200&width=300",
-    verified: true,
-    responseTime: "2 horas",
-    description: "Servicio de limpieza profunda para hogares y oficinas. Productos ecológicos disponibles.",
-  },
-  {
-    id: 6,
-    title: "Jardinería y Paisajismo",
-    provider: "Pedro Morales",
-    avatar: "/placeholder.svg?height=40&width=40",
-    rating: 4.5,
-    reviews: 94,
-    price: "Desde $22.000",
-    location: "La Reina",
-    category: "Jardinería",
-    image: "/placeholder.svg?height=200&width=300",
-    verified: true,
-    responseTime: "6 horas",
-    description: "Diseño y mantención de jardines, poda de árboles, instalación de sistemas de riego.",
-  },
-  // Puedes agregar más objetos aquí
-]
+export default function ServicesCatalog() {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function StaticServicesCatalog() {
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/services/");
+        const data = await response.json();
+        console.log("Servicios obtenidos:", data.map(s => s.id)); // Aquí
+        setServices(data);
+      } catch (error) {
+        console.error("Error al obtener los servicios:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -126,7 +55,9 @@ export default function StaticServicesCatalog() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold">Servicios Disponibles</h2>
-                <p className="text-gray-500">{services.length} servicios encontrados</p>
+                <p className="text-gray-500">
+                  {loading ? "Cargando..." : `${services.length} servicios encontrados`}
+                </p>
               </div>
 
               <div className="flex gap-2 items-center">
@@ -137,8 +68,12 @@ export default function StaticServicesCatalog() {
                   <option>Más relevantes</option>
                 </select>
                 <div className="flex border rounded overflow-hidden">
-                  <button className="px-3 py-2 bg-gray-200 text-sm" disabled><Grid className="w-4 h-4" /></button>
-                  <button className="px-3 py-2 text-sm" disabled><List className="w-4 h-4" /></button>
+                  <button className="px-3 py-2 bg-gray-200 text-sm" disabled>
+                    <Grid className="w-4 h-4" />
+                  </button>
+                  <button className="px-3 py-2 text-sm" disabled>
+                    <List className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -154,17 +89,29 @@ export default function StaticServicesCatalog() {
 
             {/* Pagination */}
             <div className="flex justify-center mt-8 gap-2">
-              <button className="px-4 py-2 border rounded" disabled>Anterior</button>
-              <button className="px-4 py-2 bg-orange-600 text-white rounded" disabled>1</button>
-              <button className="px-4 py-2 border rounded" disabled>2</button>
-              <button className="px-4 py-2 border rounded" disabled>3</button>
-              <button className="px-4 py-2 border rounded" disabled>Siguiente</button>
+              <button className="px-4 py-2 border rounded" disabled>
+                Anterior
+              </button>
+              <button className="px-4 py-2 bg-orange-600 text-white rounded" disabled>
+                1
+              </button>
+              <button className="px-4 py-2 border rounded" disabled>
+                2
+              </button>
+              <button className="px-4 py-2 border rounded" disabled>
+                3
+              </button>
+              <button className="px-4 py-2 border rounded" disabled>
+                Siguiente
+              </button>
             </div>
 
             {/* CTA */}
             <div className="bg-white rounded-lg p-8 mt-8 text-center border">
               <h3 className="text-2xl font-bold mb-4">¿Eres un profesional?</h3>
-              <p className="text-gray-500 mb-6">Únete a nuestra plataforma y conecta con miles de clientes.</p>
+              <p className="text-gray-500 mb-6">
+                Únete a nuestra plataforma y conecta con miles de clientes.
+              </p>
               <button className="px-6 py-3 bg-orange-600 text-white rounded hover:bg-red-700" disabled>
                 Registrar mi Servicio
               </button>
@@ -172,7 +119,6 @@ export default function StaticServicesCatalog() {
           </section>
         </div>
       </main>
-
     </div>
-  )
+  );
 }

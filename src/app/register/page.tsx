@@ -8,17 +8,41 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    if (password !== confirmPassword) {
-      alert("Las contraseñas no coinciden");
-      return;
+  if (password !== confirmPassword) {
+    alert("Las contraseñas no coinciden");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:8000/api/user/register/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombre: name,
+        email,
+        password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem("token", data.token);
+      alert("Registro exitoso");
+      window.location.href = "/"; // o redirige a /profile, /dashboard, etc.
+    } else {
+      alert(data.error || "Error al registrar usuario");
     }
-
-    // Lógica de registro
-    console.log("Nombre:", name, "Email:", email, "Password:", password);
-  };
+  } catch (error) {
+    console.error("Error al registrar:", error);
+    alert("Ocurrió un error al registrar.");
+  }
+};
 
   return (
     <main className="w-screen h-screen flex items-center justify-center bg-white">
