@@ -1,3 +1,4 @@
+import ServicesReviews from "@/components/services/Servicesreviews";
 import { notFound } from "next/navigation";
 
 export default async function ServiceDetailPage({
@@ -32,6 +33,9 @@ export default async function ServiceDetailPage({
         )}
         <p className="text-gray-700 mb-4">{service.description}</p>
         <div className="grid grid-cols-2 gap-4 mb-4">
+          {service.verified && (
+          <div className="text-green-600 font-semibold">✅ Profesional verificado</div>
+        )}
           <div>
             <strong>Ubicación:</strong> {service.location}
           </div>
@@ -44,10 +48,18 @@ export default async function ServiceDetailPage({
           <div>
             <strong>Valoración:</strong> {service.rating} ⭐ ({service.reviews} reseñas)
           </div>
+          <div>
+            <span className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+              Contactar
+            </span>
+          </div>
         </div>
-        {service.verified && (
-          <div className="text-green-600 font-semibold">✅ Profesional verificado</div>
-        )}
+      </div>
+      <div>
+        <h2 className="text-2xl font-bold mt-8 mb-4">Comentarios</h2>
+        <p className="text-gray-600 mb-4">
+          <ServicesReviews />
+        </p>
       </div>
     </div>
   );
