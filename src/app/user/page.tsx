@@ -50,7 +50,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      <Sidebar role="user" />
+      <Sidebar/>
       <main className="flex-1 p-6 sm:p-10">
         {profile && (
           <div className="bg-white shadow-lg rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6 w-full mb-8">

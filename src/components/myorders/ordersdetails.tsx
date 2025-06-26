@@ -66,7 +66,7 @@ const OrdersDetails: React.FC = () => {
               <button
                 onClick={() => handleViewDetails(order.id)}
                 style={{
-                  background: "#007bff",
+                  background: "#ff5733",
                   color: "#fff",
                   border: "none",
                   borderRadius: "6px",
