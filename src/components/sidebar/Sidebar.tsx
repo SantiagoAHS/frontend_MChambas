@@ -7,6 +7,7 @@ import clsx from "clsx";
 const links = [
   { href: "/user", label: "Inicio" },
   { href: "/mycontracts", label: "Mis Trabajos" },
+  { href: "/services/create", label: "Crear Servicio" },
   { href: "/chat", label: "Mis Chats" },
   { href: "/settings", label: "Configuración" },
 ];

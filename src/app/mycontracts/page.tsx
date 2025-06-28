@@ -4,7 +4,7 @@ import React from "react";
 import Sidebar from "@/components/sidebar/Sidebar";
 import ContractsDetail from "@/components/mycontracts/contractsdetail";
 
-export default function UserLayout({ children }: { children: React.ReactNode }) {
+export default function ContractsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex bg-gray-100">
       <Sidebar />

@@ -4,10 +4,10 @@ import React from "react";
 import Sidebar from "@/components/sidebar/Sidebar";
 import MyChats from "@/components/chat/mychats";
 
-export default function UserLayout({ children }: { children: React.ReactNode }) {
+export default function ChatLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex bg-gray-100">
-      <Sidebar role="user" />
+      <Sidebar />
       <div className="min-h-screen flex bg-gray-100">
         <main className="flex-1 p-8">
           {children}
