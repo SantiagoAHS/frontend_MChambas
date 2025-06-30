@@ -4,7 +4,7 @@ import { Star, MapPin, Clock } from "lucide-react";
 
 const ServiceCard = ({ service }) => (
   <Link href={`/services/${service.id}`}>
-    <div className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow cursor-pointer bg-white">
+    <div className="border border-orange-600 rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow cursor-pointer bg-white">
       <div className="relative">
         <img
           src={service.image || "/placeholder.svg"}

@@ -8,17 +8,15 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="min-h-screen flex bg-gray-100">
       <Sidebar />
-      <div className="min-h-screen flex bg-gray-100">
-        <main className="flex-1 p-8">
-          {children}
-          <div className="mt-6">
-            <h2 className="text-2xl font-bold text-gray-800">Mis Chats</h2>
-            <div className="text-gray-600 mt-2">
-              <MyChats />
-            </div>
+      
+      <main className="flex-1 p-8">
+        {children}
+        <div className="mt-6">
+          <div className="text-gray-600 mt-2">
+            <MyChats />
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

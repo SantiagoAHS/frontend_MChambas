@@ -3,31 +3,31 @@ import { Star } from "lucide-react";
 const SidebarFilters = () => {
   return (
     <aside className="hidden lg:block w-64">
-      <div className="border rounded-lg bg-white p-4 space-y-6">
+      <div className="border border-orange-600 rounded-lg bg-white p-4 space-y-6">
         <h3 className="font-semibold text-lg">Filtros</h3>
 
         <div>
           <label className="text-sm font-medium block mb-1">Categoría</label>
-          <select className="w-full border rounded px-2 py-1 text-sm" disabled>
+          <select className="w-full border border-orange-600 rounded px-2 py-1 text-sm" disabled>
             <option>Todas las categorías</option>
           </select>
         </div>
 
         <div>
           <label className="text-sm font-medium block mb-1">Ubicación</label>
-          <select className="w-full border rounded px-2 py-1 text-sm" disabled>
+          <select className="w-full border border-orange-600 rounded px-2 py-1 text-sm" disabled>
             <option>Todas las ubicaciones</option>
           </select>
         </div>
 
-        <hr />
+        <hr className="border-orange-600" />
 
         <div className="flex items-center space-x-2">
           <input type="checkbox" disabled />
           <label className="text-sm text-gray-600">Solo verificados</label>
         </div>
 
-        <hr />
+        <hr className="border-orange-600" />
 
         <div>
           <label className="text-sm font-medium block mb-1">Precio</label>
@@ -39,7 +39,7 @@ const SidebarFilters = () => {
           </div>
         </div>
 
-        <hr />
+        <hr className="border-orange-600" />
 
         <div>
           <label className="text-sm font-medium block mb-1">Calificación</label>
