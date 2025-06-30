@@ -56,9 +56,10 @@ export default async function ServiceDetailPage({
         </div>
       </div>
       <div>
-        <div className="text-gray-600 mb-4">
+        <h2 className="text-2xl font-bold mt-8 mb-4">Comentarios</h2>
+        <p className="text-gray-600 mb-4">
           <ServicesReviews />
-        </div>
+        </p>
       </div>
     </div>
   );
