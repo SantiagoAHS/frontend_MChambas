@@ -44,6 +44,7 @@ export default function LoginPage(): JSX.Element {
 
   } catch (err) {
     setError("Error de conexión con el servidor");
+    router.push("/user");
   }
 };
 
