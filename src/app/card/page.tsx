@@ -170,7 +170,7 @@ const CreditCardDetector: React.FC = () => {
 
         <div className="flex space-x-4">
           <div className="w-1/2">
-            <label className="block text-sm font-medium mb-1">Fecha de expiración (MM/AA)</label>
+            <label className="block text-sm font-medium mb-1">Fecha de expiración</label>
             <input
               type="text"
               placeholder="MM/AA"
