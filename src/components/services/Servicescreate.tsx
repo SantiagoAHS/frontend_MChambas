@@ -146,7 +146,7 @@ export default function ServicesCreate() {
 
         <input name="price" type="text" placeholder="Precio" value={formData.price} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
 
-        <button type="submit" disabled={loading} className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50">
+        <button type="submit" disabled={loading} className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50">
           {loading ? "Guardando..." : "Crear Servicio"}
         </button>
       </form>
