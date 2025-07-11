@@ -7,8 +7,6 @@ export default function ServicesCreate() {
     title: "",
     verified: false,
     description: "",
-    rating: "",
-    reviews: "",
     location: "",
     response_time: "",
     price: "",
@@ -50,21 +48,6 @@ export default function ServicesCreate() {
     setError(null);
     setSuccess(false);
 
-    const ratingNum = parseFloat(formData.rating);
-    const reviewsNum = parseInt(formData.reviews);
-
-    if (isNaN(ratingNum) || ratingNum < 0 || ratingNum > 5) {
-      setError("El rating debe ser un número entre 0 y 5");
-      setLoading(false);
-      return;
-    }
-
-    if (isNaN(reviewsNum) || reviewsNum < 0) {
-      setError("El número de reseñas debe ser un entero positivo");
-      setLoading(false);
-      return;
-    }
-
     const token = localStorage.getItem("token");
     if (!token) {
       setError("No autorizado. Por favor inicia sesión.");
@@ -77,8 +60,6 @@ export default function ServicesCreate() {
     if (file) data.append("image", file);
     data.append("verified", String(formData.verified));
     data.append("description", formData.description);
-    data.append("rating", formData.rating);
-    data.append("reviews", formData.reviews);
     data.append("location", formData.location);
     data.append("response_time", formData.response_time);
     data.append("price", formData.price);
@@ -102,8 +83,6 @@ export default function ServicesCreate() {
           title: "",
           verified: false,
           description: "",
-          rating: "",
-          reviews: "",
           location: "",
           response_time: "",
           price: "",
@@ -135,10 +114,6 @@ export default function ServicesCreate() {
         </label>
 
         <textarea name="description" placeholder="Descripción" value={formData.description} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
-
-        <input name="rating" type="number" step="0.1" min="0" max="5" placeholder="Rating (0-5)" value={formData.rating} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
-
-        <input name="reviews" type="number" min="0" placeholder="Número de reseñas" value={formData.reviews} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
 
         <input name="location" type="text" placeholder="Ubicación" value={formData.location} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
 

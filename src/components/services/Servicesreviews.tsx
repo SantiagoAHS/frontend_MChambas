@@ -1,52 +1,107 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Review {
   id: number;
-  name: string;
+  user: { nombre: string };
+  rating: number;
   comment: string;
-  date: string;
+  created_at: string;
 }
 
-const initialReviews: Review[] = [
-  {
-    id: 1,
-    name: "Juan Pérez",
-    comment: "Excelente servicio, muy recomendado.",
-    date: "2024-06-01",
-  },
-  {
-    id: 2,
-    name: "María López",
-    comment: "Muy buena atención y rapidez.",
-    date: "2024-06-02",
-  },
-];
+interface Props {
+  serviceId: number;
+}
 
-const ServicesReviews: React.FC = () => {
-  const [reviews, setReviews] = useState<Review[]>(initialReviews);
-  const [name, setName] = useState("");
+const ServicesReviews: React.FC<Props> = ({ serviceId }) => {
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  useEffect(() => {
+    async function fetchReviews() {
+      setError(null);
+      try {
+        const res = await fetch(`http://localhost:8000/api/services/${serviceId}/reviews/`);
+        if (!res.ok) throw new Error("Error al cargar los comentarios");
+        const data = await res.json();
+        setReviews(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error desconocido");
+        console.error(err);
+      }
+    }
+    if (serviceId) {
+      fetchReviews();
+    }
+  }, [serviceId]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !comment.trim()) return;
-    const newReview: Review = {
-      id: reviews.length + 1,
-      name,
-      comment,
-      date: new Date().toISOString().split("T")[0],
-    };
-    setReviews([newReview, ...reviews]);
-    setName("");
-    setComment("");
+    if (!comment.trim()) return alert("Debes escribir un comentario");
+    if (rating === 0) return alert("Debes seleccionar una calificación de estrellas");
+    if (!token) return alert("Debes estar autenticado para comentar");
+
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`http://localhost:8000/api/services/${serviceId}/reviews/create/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify({ rating, comment }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(JSON.stringify(errData));
+      }
+
+      const newReview = await res.json();
+      setReviews((prev) => [newReview, ...prev]);
+      setComment("");
+      setRating(0);
+    } catch (err) {
+      alert("Error al enviar el comentario");
+      setError(err instanceof Error ? err.message : "Error desconocido");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Componente para mostrar estrellas (clickeables)
+  const StarSelector = () => {
+    const stars = [1, 2, 3, 4, 5];
+    return (
+      <div style={{ display: "flex", gap: 8, marginBottom: 12, justifyContent: "center" }}>
+        {stars.map((star) => (
+          <span
+            key={star}
+            style={{
+              fontSize: "24px",
+              cursor: "pointer",
+              color: star <= rating ? "#ffc107" : "#ddd",
+            }}
+            onClick={() => setRating(star)}
+            aria-label={`${star} estrella${star > 1 ? "s" : ""}`}
+          >
+            ★
+          </span>
+        ))}
+      </div>
+    );
   };
 
   return (
     <section style={{ width: "100%", padding: "20px" }}>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Comentarios de Servicios
-      </h2>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Comentarios de Servicios</h2>
 
       <form
         onSubmit={handleSubmit}
@@ -59,18 +114,8 @@ const ServicesReviews: React.FC = () => {
           marginInline: "auto",
         }}
       >
-        <input
-          type="text"
-          placeholder="Tu nombre"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          style={{
-            padding: "10px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-          }}
-        />
+        <StarSelector />
+
         <textarea
           placeholder="Tu comentario"
           value={comment}
@@ -83,22 +128,29 @@ const ServicesReviews: React.FC = () => {
             border: "1px solid #ccc",
             resize: "none",
           }}
+          disabled={loading}
         />
+
         <button
           type="submit"
+          disabled={loading}
           style={{
             background: "#ff5733",
             color: "#fff",
             border: "none",
             padding: "10px",
             borderRadius: "6px",
-            cursor: "pointer",
+            cursor: loading ? "not-allowed" : "pointer",
             fontWeight: "bold",
           }}
         >
-          Enviar comentario
+          {loading ? "Enviando..." : "Enviar comentario"}
         </button>
       </form>
+
+      {error && (
+        <p style={{ color: "red", textAlign: "center", marginBottom: "16px" }}>{error}</p>
+      )}
 
       <ul
         style={{
@@ -108,6 +160,7 @@ const ServicesReviews: React.FC = () => {
           marginInline: "auto",
         }}
       >
+        {reviews.length === 0 && <p>No hay comentarios aún.</p>}
         {reviews.map((review) => (
           <li
             key={review.id}
@@ -120,10 +173,13 @@ const ServicesReviews: React.FC = () => {
             }}
           >
             <div style={{ marginBottom: "6px" }}>
-              <strong>{review.name}</strong>{" "}
+              <strong>{review.user.nombre || "Usuario"}</strong>{" "}
               <span style={{ color: "#888", fontSize: "0.9em" }}>
-                ({review.date})
+                ({new Date(review.created_at).toLocaleDateString()})
               </span>
+            </div>
+            <div style={{ color: "#ffc107", marginBottom: 6 }}>
+              {"★".repeat(review.rating) + "☆".repeat(5 - review.rating)}
             </div>
             <p style={{ margin: 0 }}>{review.comment}</p>
           </li>

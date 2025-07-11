@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 export default async function ServiceDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>;  // Aquí sí es Promise, hay que await
 }) {
   const resolvedParams = await params;
   const id = resolvedParams.id;
@@ -26,7 +26,7 @@ export default async function ServiceDetailPage({
         </p>
         {service.image && (
           <img
-            src={`http://localhost:8000${service.image}`} // <-- url completa al backend
+            src={`http://localhost:8000${service.image}`}
             alt={service.title}
             className="w-full h-64 object-cover rounded mb-4"
           />
@@ -34,8 +34,8 @@ export default async function ServiceDetailPage({
         <p className="text-gray-700 mb-4">{service.description}</p>
         <div className="grid grid-cols-2 gap-4 mb-4">
           {service.verified && (
-          <div className="text-green-600 font-semibold">✅ Profesional verificado</div>
-        )}
+            <div className="text-green-600 font-semibold">✅ Profesional verificado</div>
+          )}
           <div>
             <strong>Ubicación:</strong> {service.location}
           </div>
@@ -55,11 +55,10 @@ export default async function ServiceDetailPage({
           </div>
         </div>
       </div>
+
       <div>
         <h2 className="text-2xl font-bold mt-8 mb-4">Comentarios</h2>
-        <p className="text-gray-600 mb-4">
-          <ServicesReviews />
-        </p>
+        <ServicesReviews serviceId={parseInt(id, 10)} />
       </div>
     </div>
   );
