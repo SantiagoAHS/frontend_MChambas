@@ -7,7 +7,11 @@ export default function ServicesCreate() {
     title: "",
     verified: false,
     description: "",
-    location: "",
+    street: "",
+    city: "",
+    state: "",
+    country: "",
+    postalcode: "",
     response_time: "",
     price: "",
   });
@@ -60,7 +64,14 @@ export default function ServicesCreate() {
     if (file) data.append("image", file);
     data.append("verified", String(formData.verified));
     data.append("description", formData.description);
-    data.append("location", formData.location);
+
+    // Campos de dirección desglosados
+    data.append("street", formData.street);
+    data.append("city", formData.city);
+    data.append("state", formData.state);
+    data.append("country", formData.country);
+    data.append("postalcode", formData.postalcode);
+
     data.append("response_time", formData.response_time);
     data.append("price", formData.price);
 
@@ -69,7 +80,7 @@ export default function ServicesCreate() {
         method: "POST",
         headers: {
           Authorization: `Token ${token}`,
-          // ¡NO pongas Content-Type! FormData lo hace solo
+          // No pongas Content-Type, FormData lo maneja
         },
         body: data,
       });
@@ -83,7 +94,11 @@ export default function ServicesCreate() {
           title: "",
           verified: false,
           description: "",
-          location: "",
+          street: "",
+          city: "",
+          state: "",
+          country: "",
+          postalcode: "",
           response_time: "",
           price: "",
         });
@@ -104,24 +119,115 @@ export default function ServicesCreate() {
       {success && <p className="text-green-600 mb-4">Servicio creado con éxito</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input name="title" type="text" placeholder="Título" value={formData.title} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
+        <input
+          name="title"
+          type="text"
+          placeholder="Título"
+          value={formData.title}
+          onChange={handleChange}
+          required
+          className="w-full border px-3 py-2 rounded"
+        />
 
-        <input type="file" accept="image/*" onChange={handleFileChange} className="w-full border px-3 py-2 rounded" />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="w-full border px-3 py-2 rounded"
+        />
 
         <label className="flex items-center gap-2">
-          <input name="verified" type="checkbox" checked={formData.verified} onChange={handleChange} />
+          <input
+            name="verified"
+            type="checkbox"
+            checked={formData.verified}
+            onChange={handleChange}
+          />
           Verificado
         </label>
 
-        <textarea name="description" placeholder="Descripción" value={formData.description} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
+        <textarea
+          name="description"
+          placeholder="Descripción"
+          value={formData.description}
+          onChange={handleChange}
+          required
+          className="w-full border px-3 py-2 rounded"
+        />
 
-        <input name="location" type="text" placeholder="Ubicación" value={formData.location} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
+        <input
+          name="street"
+          type="text"
+          placeholder="Calle y número"
+          value={formData.street}
+          onChange={handleChange}
+          required
+          className="w-full border px-3 py-2 rounded"
+        />
 
-        <input name="response_time" type="text" placeholder="Tiempo de respuesta" value={formData.response_time} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
+        <input
+          name="city"
+          type="text"
+          placeholder="Ciudad"
+          value={formData.city}
+          onChange={handleChange}
+          required
+          className="w-full border px-3 py-2 rounded"
+        />
 
-        <input name="price" type="text" placeholder="Precio" value={formData.price} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
+        <input
+          name="state"
+          type="text"
+          placeholder="Estado"
+          value={formData.state}
+          onChange={handleChange}
+          className="w-full border px-3 py-2 rounded"
+        />
 
-        <button type="submit" disabled={loading} className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50">
+        <input
+          name="country"
+          type="text"
+          placeholder="País"
+          value={formData.country}
+          onChange={handleChange}
+          required
+          className="w-full border px-3 py-2 rounded"
+        />
+
+        <input
+          name="postalcode"
+          type="text"
+          placeholder="Código Postal"
+          value={formData.postalcode}
+          onChange={handleChange}
+          className="w-full border px-3 py-2 rounded"
+        />
+
+        <input
+          name="response_time"
+          type="text"
+          placeholder="Tiempo de respuesta"
+          value={formData.response_time}
+          onChange={handleChange}
+          required
+          className="w-full border px-3 py-2 rounded"
+        />
+
+        <input
+          name="price"
+          type="text"
+          placeholder="Precio"
+          value={formData.price}
+          onChange={handleChange}
+          required
+          className="w-full border px-3 py-2 rounded"
+        />
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"
+        >
           {loading ? "Guardando..." : "Crear Servicio"}
         </button>
       </form>
