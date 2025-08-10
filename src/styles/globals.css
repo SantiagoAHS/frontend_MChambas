@@ -4,13 +4,29 @@
 :root {
   --background: #ffffff;
   --foreground: #000000;
-  --color-accent: #000000;
+  --color-accent: #ff6600;
+  --button-background: #22c55e;
+  --button-text: #ffffff;
+  --button-border: 2px solid #22c55e;
+  --button-hover-background: #ffffff;
+  --button-hover-text: #22c55e;
+  --border-color: #22c55e;
+  --border-radius: 2px;
+  --border-width: 2px;
 }
 
 [data-theme="dark"] {
-  --background: #111111;
+  --background: #3a3a3a;
   --foreground: #ffffff;
   --color-accent: #ff6600;
+  --button-background: #541491;
+  --button-text: #0c0c0c;
+  --button-border: 2px solid #541491;
+  --button-hover-background: #0c0c0c;
+  --button-hover-text: #541491;
+  --border-color: #541491;
+  --border-radius: 2px;
+  --border-width: 2px;
 }
 
 

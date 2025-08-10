@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { useTheme } from "@/context/ThemeContext";
 
 const links = [
   { href: "/user", label: "Inicio" },
@@ -14,20 +15,32 @@ const links = [
 
 const Sidebar: React.FC = () => {
   const pathname = usePathname();
+  const { theme } = useTheme();
+
+  const isLight = theme === "light";
 
   return (
-    <aside className="w-64 bg-white shadow-md p-4">
-      <h2 className="text-xl font-bold text-red-600 mb-6">Panel Usuario</h2>
+    <aside
+      className={clsx(
+        "w-64 shadow-md p-4 transition-colors duration-300",
+        isLight ? "bg-white" : "bg-[#3a3a3a]"
+      )}
+    >
+      <h2 className="text-xl font-bold text-orange-600 mb-6">Panel Usuario</h2>
       <nav className="space-y-4">
         {links.map(({ href, label }) => (
           <Link
             key={href}
             href={href}
             className={clsx(
-              "block px-2 py-1 rounded",
+              "block px-2 py-1 rounded transition",
               pathname === href
-                ? "text-red-600 border-l-4 border-red-600 bg-red-50 font-semibold"
-                : "text-gray-700 hover:text-red-600"
+                ? isLight
+                  ? "text-orange-600 border-l-4 border-orange-600 bg-orange-50 font-semibold"
+                  : "text-orange-600 border-l-4 border-orange-600 bg-orange-900 font-semibold"
+                : isLight
+                  ? "text-gray-700 hover:text-orange-600"
+                  : "text-gray-200 hover:text-orange-400"
             )}
           >
             {label}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useTheme } from "@/context/ThemeContext";
 import ServicesReviews from "@/components/services/Servicesreviews";
 
 export default function ServiceDetailPage() {
@@ -9,6 +10,7 @@ export default function ServiceDetailPage() {
   const { id } = useParams();
   const [service, setService] = useState<any>(null);
   const [error, setError] = useState(false);
+  const { theme } = useTheme();
 
   useEffect(() => {
     async function fetchService() {
@@ -55,7 +57,9 @@ export default function ServiceDetailPage() {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
-        body: JSON.stringify({ content: "Hola, estoy interesado en tu servicio" }),
+        body: JSON.stringify({
+          content: "Hola, estoy interesado en tu servicio",
+        }),
       });
 
       router.push("/chat");
@@ -69,10 +73,24 @@ export default function ServiceDetailPage() {
   if (!service) return <div className="p-6">Cargando...</div>;
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
-      <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+    <div
+      className={`min-h-screen p-6 ${
+        theme === "dark" ? "bg-[#3a3a3a] text-white" : "bg-gray-50 text-black"
+      }`}
+    >
+      <div
+        className={`max-w-3xl mx-auto p-6 rounded shadow border ${
+          theme === "dark"
+            ? "bg-[#2b2b2b] border-gray-600"
+            : "bg-white border-gray-200"
+        }`}
+      >
         <h1 className="text-3xl font-bold mb-2">{service.title}</h1>
-        <p className="text-gray-600 mb-4">
+        <p
+          className={`mb-4 ${
+            theme === "dark" ? "text-gray-300" : "text-gray-600"
+          }`}
+        >
           Ofrecido por: <strong>{service.provider.nombre}</strong>
         </p>
 
@@ -80,15 +98,17 @@ export default function ServiceDetailPage() {
           <img
             src={`http://localhost:8000${service.image}`}
             alt={service.title}
-            className="w-full h-64 object-cover rounded mb-4"
+            className="w-full h-64 object-cover rounded mb-4 border border-gray-400"
           />
         )}
 
-        <p className="text-gray-700 mb-4">{service.description}</p>
+        <p className="mb-4">{service.description}</p>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           {service.verified && (
-            <div className="text-green-600 font-semibold">✅ Profesional verificado</div>
+            <div className="text-green-500 font-semibold">
+              ✅ Profesional verificado
+            </div>
           )}
           <div>
             <strong>Ubicación:</strong> {service.location}
@@ -100,21 +120,30 @@ export default function ServiceDetailPage() {
             <strong>Precio:</strong> {service.price}
           </div>
           <div>
-            <strong>Valoración:</strong> {service.rating} ⭐ ({service.reviews} reseñas)
+            <strong>Valoración:</strong> {service.rating} ⭐ ({service.reviews}{" "}
+            reseñas)
           </div>
         </div>
 
         <div className="flex gap-4">
           <button
             onClick={handleContact}
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            className={`px-4 py-2 rounded font-semibold transition ${
+              theme === "dark"
+                ? "bg-green-700 hover:bg-green-800 text-white"
+                : "bg-green-600 hover:bg-green-700 text-white"
+            }`}
           >
             Contactar
           </button>
 
           <button
             onClick={() => router.push(`/payments/checkout/${id}`)}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className={`px-4 py-2 rounded font-semibold transition ${
+              theme === "dark"
+                ? "bg-blue-700 hover:bg-blue-800 text-white"
+                : "bg-blue-600 hover:bg-blue-700 text-white"
+            }`}
           >
             Contratar
           </button>
