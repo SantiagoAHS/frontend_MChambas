@@ -1,46 +1,63 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTheme } from "@/context/ThemeContext";
 
 type OrderDetail = {
   id: number;
-  service: string;
-  date: string;
-  status: string;
-  price: number;
+  servicio: {
+    title: string;
+    price: number;
+  };
+  fecha: string;
+  estado: string;
+  total: number;
 };
-
-const mockOrders: OrderDetail[] = [
-  {
-    id: 1,
-    service: "Limpieza de hogar",
-    date: "2024-06-10",
-    status: "Completado",
-    price: 350,
-  },
-  {
-    id: 2,
-    service: "Reparación de plomería",
-    date: "2024-06-08",
-    status: "En proceso",
-    price: 500,
-  },
-];
 
 const OrdersDetails: React.FC = () => {
   const { theme } = useTheme();
   const isLight = theme === "light";
 
+  const [orders, setOrders] = useState<OrderDetail[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    fetch("http://localhost:8000/api/ventas/mis-pedidos/", {
+      headers: { Authorization: `Token ${token}` },
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          const data = await res.json();
+          setOrders(data);
+        } else {
+          console.error("Error cargando pedidos");
+        }
+      })
+      .catch((err) => console.error("Error de red:", err))
+      .finally(() => setLoading(false));
+  }, []);
+
   const handleViewDetails = (id: number) => {
-    alert(`Ver detalles de la orden con ID: ${id}`);
+    router.push(`/myorders/${id}`);
   };
+
+  if (loading) {
+    return <p style={{ textAlign: "center" }}>Cargando pedidos...</p>;
+  }
 
   const background = isLight ? "#f9f9f9" : "#1e1e1e";
   const border = isLight ? "#ddd" : "#444";
   const text = isLight ? "#111" : "#ddd";
   const secondaryText = isLight ? "#555" : "#aaa";
-  const buttonBg = isLight ? "#ff6600" : "#ff6600";
+  const buttonBg = "#ff6600";
   const buttonHover = isLight ? "#ffffff" : "#222";
   const buttonText = "#ffffff";
 
@@ -55,21 +72,21 @@ const OrdersDetails: React.FC = () => {
       }}
     >
       <h1
-  style={{
-    textAlign: "center",
-    marginBottom: "24px",
-    fontSize: "20px",
-    color: "#ff6600",
-  }}
->
-  Servicios Pedidos
-</h1>
+        style={{
+          textAlign: "center",
+          marginBottom: "24px",
+          fontSize: "20px",
+          color: "#ff6600",
+        }}
+      >
+        Servicios Pedidos
+      </h1>
 
-      {mockOrders.length === 0 ? (
+      {orders.length === 0 ? (
         <p style={{ textAlign: "center" }}>No tienes órdenes registradas.</p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          {mockOrders.map((order) => (
+          {orders.map((order) => (
             <li
               key={order.id}
               style={{
@@ -90,13 +107,11 @@ const OrdersDetails: React.FC = () => {
               }}
             >
               <div style={{ flexGrow: 1 }}>
-                <div
-                  style={{ fontWeight: "bold", marginBottom: "4px", color: text }}
-                >
-                  {order.service}
+                <div style={{ fontWeight: "bold", marginBottom: "4px" }}>
+                  {order.servicio?.title}
                 </div>
                 <div style={{ color: secondaryText }}>
-                  Fecha: {order.date} | Estado: {order.status} | Precio: ${order.price}
+                  Fecha: {new Date(order.fecha).toLocaleDateString()} | Estado: {order.estado} | Precio: ${order.total}
                 </div>
               </div>
               <button
@@ -112,7 +127,7 @@ const OrdersDetails: React.FC = () => {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = buttonHover;
-                  e.currentTarget.style.color = isLight ? buttonBg : buttonBg;
+                  e.currentTarget.style.color = buttonBg;
                   e.currentTarget.style.border = `1px solid ${buttonBg}`;
                 }}
                 onMouseLeave={(e) => {
