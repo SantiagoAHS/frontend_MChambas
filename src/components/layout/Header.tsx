@@ -1,8 +1,19 @@
-import React from 'react';
+"use client";
+
+import React from "react";
+import { useTheme } from "@/context/ThemeContext";
 
 const Header: React.FC = () => {
+  const { theme } = useTheme();
+
   return (
-    <header className="bg-gradient-to-r from-red-500 to-orange-600 text-white py-2 text-center text-xs">
+    <header
+      className={`py-2 text-center text-xs ${
+        theme === "light"
+          ? "bg-green-500 text-black"
+          : "bg-purple-500 text-white"
+      }`}
+    >
       Los mejores servicios · Servicio al cliente · Calidad garantizada · Precios competitivos
     </header>
   );

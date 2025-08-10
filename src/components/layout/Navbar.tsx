@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { UserCircle } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext"; 
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
@@ -10,6 +11,8 @@ const Navbar: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const { theme, toggleTheme } = useTheme(); 
 
   useEffect(() => {
     const checkToken = () => {
@@ -40,7 +43,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-200 shadow-sm">
+    <nav className="text-black dark:bg-gray dark:text-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Link href="/">
@@ -55,6 +58,37 @@ const Navbar: React.FC = () => {
           <li><Link href="/help" className={`hover:text-red-600 ${pathname === "/help" ? "text-orange-500 border-b-2 border-orange-500 pb-1" : ""}`}>Ayuda</Link></li>
           <li><Link href="/about" className={`hover:text-red-600 ${pathname === "/about" ? "text-orange-500 border-b-2 border-orange-500 pb-1" : ""}`}>Acerca de</Link></li>
           <li><Link href="/contact" className={`hover:text-red-600 ${pathname === "/contact" ? "text-orange-500 border-b-2 border-orange-500 pb-1" : ""}`}>Contacto</Link></li>
+
+          <li>
+            <button
+              onClick={toggleTheme}
+              className="rounded-full text-sm transition font-medium flex items-center justify-center"
+              style={{
+                width: "38px",
+                height: "38px",
+                backgroundColor: "var(--button-background)",
+                color: "var(--button-text)",
+                border: "var(--button-border)",
+                padding: 0,
+                lineHeight: 1,
+              }}
+              onMouseEnter={(e) => {
+                if (theme === "dark") {
+                  e.currentTarget.style.backgroundColor = "#3a3a3a";  // Hover oscuro personalizado
+                } else {
+                  e.currentTarget.style.backgroundColor = "var(--button-hover-background)";
+                }
+                e.currentTarget.style.color = "var(--button-hover-text)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--button-background)";
+                e.currentTarget.style.color = "var(--button-text)";
+              }}
+              aria-label={theme === "light" ? "Cambiar a modo oscuro" : "Cambiar a modo claro"}
+            >
+              {theme === "light" ? "🌙" : "☀️"}
+            </button>
+          </li>
 
           <li className="relative" ref={dropdownRef}>
             <button

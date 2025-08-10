@@ -3,13 +3,16 @@
 import { useRouter } from "next/navigation";
 import { Star, MapPin, Clock } from "lucide-react";
 import Link from "next/link";
+import { useTheme } from "@/context/ThemeContext";
 
 const ServiceCard = ({ service }) => {
   const router = useRouter();
+  const { theme } = useTheme();
+  const isLight = theme === "light";
 
   const handleContact = async (e) => {
-    e.stopPropagation(); // <- evita que se active el Link
-    e.preventDefault();  // <- evita navegación automática
+    e.stopPropagation();
+    e.preventDefault();
 
     const token = localStorage.getItem("token");
     if (!token) {
@@ -18,7 +21,6 @@ const ServiceCard = ({ service }) => {
     }
 
     try {
-      // 1. Crear o recuperar el chat
       const res = await fetch("http://localhost:8000/api/chats/create/", {
         method: "POST",
         headers: {
@@ -32,28 +34,36 @@ const ServiceCard = ({ service }) => {
 
       const chat = await res.json();
 
-      // 2. Enviar mensaje inicial
       await fetch(`http://localhost:8000/api/chats/${chat.id}/send/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
-        body: JSON.stringify({ content: "Hola, estoy interesado en tu servicio" }),
+        body: JSON.stringify({
+          content: "Hola, estoy interesado en tu servicio",
+        }),
       });
 
-      // 3. Redirigir al chat general
-      router.push("/chat"); // o a `/chat/${chat.id}` si quieres ir a ese chat directamente
-
+      router.push("/chat");
     } catch (err) {
       console.error(err);
       alert("Ocurrió un error al contactar");
     }
   };
 
+  const borderColor = isLight ? "#22c55e" : "#9333ea"; // green-500 / purple-500
+
   return (
-    <Link href={`/services/${service.id}`}>
-      <div className="border border-orange-600 rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow cursor-pointer bg-white">
+    <Link href={`/services/${service.id}`} className="h-full">
+      <div
+        className="flex flex-col h-full rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow cursor-pointer"
+        style={{
+          border: `2px solid ${borderColor}`,
+          background: isLight ? "#ffffff" : "#1f1f1f",
+          color: isLight ? "#000000" : "#e5e5e5",
+        }}
+      >
         <div className="relative">
           <img
             src={service.image || "/placeholder.svg"}
@@ -66,8 +76,10 @@ const ServiceCard = ({ service }) => {
             </span>
           )}
         </div>
-        <div className="p-4">
-          <h3 className="font-semibold text-lg mb-1">{service.title}</h3>
+        <div className="p-4 flex flex-col flex-grow">
+          <h3 className="font-semibold text-lg mb-1" style={{ color: "#ff6600" }}>
+            {service.title}
+          </h3>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs">
               {service.provider?.nombre?.[0] || "?"}
@@ -76,7 +88,12 @@ const ServiceCard = ({ service }) => {
               {service.provider?.nombre || "Sin nombre"}
             </span>
           </div>
-          <p className="text-sm text-gray-600 mb-3">{service.description}</p>
+          <p
+            className="text-sm text-gray-600 mb-3 line-clamp-3"
+            style={{ flexGrow: 1 }}
+          >
+            {service.description}
+          </p>
           <div className="flex items-center gap-4 text-sm mb-2">
             <div className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -92,11 +109,18 @@ const ServiceCard = ({ service }) => {
             <Clock className="w-4 h-4" />
             <span>Responde en {service.response_time}</span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-lg font-bold text-green-600">{service.price}</span>
+          <div className="flex justify-between items-center mt-auto">
+            <span className="text-lg font-bold" style={{ color: "#ff6600" }}>
+              {service.price}
+            </span>
             <button
               onClick={handleContact}
-              className="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700"
+              className={`
+                font-semibold px-4 py-2 rounded shadow transition border-2
+                ${isLight
+                  ? "bg-green-500 text-white border-green-500 hover:bg-white hover:text-green-500"
+                  : "bg-purple-500 text-white border-purple-500 hover:bg-white hover:text-purple-500"}
+              `}
             >
               Contactar
             </button>

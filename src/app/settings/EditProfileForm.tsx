@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useTheme } from "@/context/ThemeContext";
 
 interface Props {
   profile: {
@@ -8,10 +9,13 @@ interface Props {
     telefono: string;
     avatar: string | null;
   };
-  onUpdate: () => void; // Para recargar perfil tras actualizar
+  onUpdate: () => void;
 }
 
 export default function EditProfileForm({ profile, onUpdate }: Props) {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
+
   const [nombre, setNombre] = useState(profile.nombre);
   const [telefono, setTelefono] = useState(profile.telefono);
   const [avatar, setAvatar] = useState<File | null>(null);
@@ -38,7 +42,7 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
 
       if (res.ok) {
         alert("Perfil actualizado");
-        onUpdate(); // Refresca perfil
+        onUpdate();
       } else {
         alert("Error al actualizar perfil");
       }
@@ -51,42 +55,70 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg space-y-4 max-w-xl">
-      <h3 className="text-xl font-bold text-gray-800">Editar Perfil</h3>
+    <form
+      onSubmit={handleSubmit}
+      className={`p-6 rounded-xl shadow-lg space-y-4 max-w-xl mx-auto mt-10 border transition
+        ${isLight 
+          ? "bg-white border-green-600" 
+          : "bg-[#2e2e2e] border-purple-600"
+        }`}
+    >
+      <h3 className={`text-xl font-bold ${isLight ? "text-gray-800" : "text-gray-200"}`}>
+        Editar Perfil
+      </h3>
 
       <div>
-        <label className="block text-sm text-gray-700 mb-1">Nombre</label>
+        <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
+          Nombre
+        </label>
         <input
           type="text"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          className="w-full border rounded px-3 py-2 focus:ring-red-500 focus:outline-none"
+          className={`w-full rounded px-3 py-2 border transition focus:outline-none 
+            ${isLight 
+              ? "border-gray-300 text-gray-800 focus:ring-2 focus:ring-green-500 bg-white" 
+              : "border-gray-600 text-gray-100 focus:ring-2 focus:ring-purple-500 bg-[#3a3a3a]"
+            }`}
         />
       </div>
 
       <div>
-        <label className="block text-sm text-gray-700 mb-1">Teléfono</label>
+        <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
+          Teléfono
+        </label>
         <input
           type="text"
           value={telefono}
           onChange={(e) => setTelefono(e.target.value)}
-          className="w-full border rounded px-3 py-2 focus:ring-red-500 focus:outline-none"
+          className={`w-full rounded px-3 py-2 border transition focus:outline-none 
+            ${isLight 
+              ? "border-gray-300 text-gray-800 focus:ring-2 focus:ring-green-500 bg-white" 
+              : "border-gray-600 text-gray-100 focus:ring-2 focus:ring-purple-500 bg-[#3a3a3a]"
+            }`}
         />
       </div>
 
       <div>
-        <label className="block text-sm text-gray-700 mb-1">Avatar</label>
+        <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
+          Avatar
+        </label>
         <input
           type="file"
           accept="image/*"
           onChange={(e) => setAvatar(e.target.files?.[0] || null)}
+          className={`w-full ${isLight ? "text-gray-800" : "text-gray-200"}`}
         />
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded"
+        className={`w-full py-2 rounded font-semibold transition disabled:opacity-50
+          ${isLight 
+            ? "bg-green-600 text-white hover:bg-white hover:text-green-600 hover:border hover:border-green-600"
+            : "bg-purple-600 text-white hover:bg-white hover:text-purple-600 hover:border hover:border-purple-600"
+          }`}
       >
         {loading ? "Guardando..." : "Guardar cambios"}
       </button>

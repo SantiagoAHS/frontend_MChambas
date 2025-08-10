@@ -1,14 +1,20 @@
-// components/layouts/SettingsLayout.tsx
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/sidebar/Sidebar";
 import EditProfileForm from "@/app/settings/EditProfileForm";
 import { UserCircleIcon, PhoneIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
-
+import { useTheme } from "@/context/ThemeContext";
 
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
-  const [profile, setProfile] = useState<{ email: string; nombre: string; telefono: string; avatar: string | null } | null>(null);
+  const { theme } = useTheme();
+  const isLight = theme === "light";
+  const [profile, setProfile] = useState<{
+    email: string;
+    nombre: string;
+    telefono: string;
+    avatar: string | null;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -17,7 +23,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
       const token = localStorage.getItem("token");
 
       if (!token) {
-        router.push("/login"); // Si no hay token, redirige al login
+        router.push("/login");
         return;
       }
 
@@ -32,7 +38,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           const data = await res.json();
           setProfile(data);
         } else {
-          localStorage.removeItem("token"); // Token inválido, lo eliminamos
+          localStorage.removeItem("token");
           router.push("/login");
         }
       } catch (error) {
@@ -47,16 +53,21 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
   }, [router]);
 
   if (loading) {
-    return <p className="p-8">Cargando perfil...</p>;
+    return (
+      <p className={`p-8 ${isLight ? "text-gray-800" : "text-gray-200"}`}>Cargando perfil...</p>
+    );
   }
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className={`min-h-screen flex ${isLight ? "bg-white" : "bg-[#3a3a3a]"}`}>
       <Sidebar role="user" />
       <main className="flex-1 p-6 sm:p-10">
         {profile && (
           <>
-            <div className="bg-white shadow-lg rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6 w-full mb-8">
+            <div
+              className={`shadow-lg rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6 w-full mb-8 border transition
+              ${isLight ? "bg-white border-green-600" : "bg-[#2e2e2e] border-purple-600"}`}
+            >
               {profile.avatar ? (
                 <img
                   src={profile.avatar}
@@ -70,15 +81,15 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
               )}
 
               <div className="flex-1 space-y-3 text-center sm:text-left">
-                <div className="text-2xl font-bold text-gray-800 flex items-center justify-center sm:justify-start gap-2">
-                  <UserCircleIcon className="w-6 h-6 text-red-500" />
+                <div className={`text-2xl font-bold flex items-center justify-center sm:justify-start gap-2 ${isLight ? "text-gray-800" : "text-gray-200"}`}>
+                  <UserCircleIcon className={`w-6 h-6 ${isLight ? "text-green-600" : "text-purple-500"}`} />
                   {profile.nombre}
                 </div>
-                <div className="text-gray-700 flex items-center justify-center sm:justify-start gap-2">
+                <div className={`flex items-center justify-center sm:justify-start gap-2 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
                   <EnvelopeIcon className="w-5 h-5 text-gray-500" />
                   {profile.email}
                 </div>
-                <div className="text-gray-700 flex items-center justify-center sm:justify-start gap-2">
+                <div className={`flex items-center justify-center sm:justify-start gap-2 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
                   <PhoneIcon className="w-5 h-5 text-gray-500" />
                   {profile.telefono}
                 </div>
@@ -92,5 +103,4 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
       </main>
     </div>
   );
-
 }

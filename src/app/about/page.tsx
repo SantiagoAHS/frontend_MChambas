@@ -1,12 +1,16 @@
-'use client';
+"use client";
+
 import React, { useEffect, useRef, useState } from 'react';
 import { animate } from 'animejs';
+import { useTheme } from "@/context/ThemeContext";
 
 export default function AboutPage() {
   const sectionsRef = useRef<HTMLDivElement[]>([]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const { theme } = useTheme();
+  const isLight = theme === "light";
 
-  const accentColor = '#ff6600'; 
+  const accentColor = '#ff6600';
 
   const animateSection = (section: HTMLDivElement, index: number) => {
     const image = section.querySelector<HTMLElement>('.image');
@@ -49,10 +53,8 @@ export default function AboutPage() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         const index = sectionsRef.current.findIndex((sec) => sec === entry.target);
-        if (entry.isIntersecting && index !== -1) {
-          if (index !== activeIndex) {
-            setActiveIndex(index);
-          }
+        if (entry.isIntersecting && index !== -1 && index !== activeIndex) {
+          setActiveIndex(index);
         }
       });
     }, observerOptions);
@@ -78,98 +80,77 @@ export default function AboutPage() {
     if (el) sectionsRef.current[index] = el;
   };
 
+  const bgCard = isLight ? "#f3f4f6" : "#2d2d2d"; // gris claro / gris oscuro
+  const textMuted = isLight ? "#4b5563" : "#cccccc";
+  const borderColor = isLight ? "#e5e7eb" : "#444";
+
   return (
     <section
-      className="overflow-y-scroll"
-      style={{ scrollSnapType: 'y mandatory', height: '70vh' }}
+      className="overflow-y-scroll transition-colors duration-300"
+      style={{
+        scrollSnapType: 'y mandatory',
+        height: '70vh',
+        backgroundColor: isLight ? "#ffffff" : "#3a3a3a",
+        color: isLight ? "#111" : "#ddd",
+      }}
     >
       <div className="max-w-6xl mx-auto">
-        <div
-          className="flex flex-col md:flex-row items-center gap-12 scroll-snap-align-start overflow-hidden"
-          ref={(el) => setRef(el, 0)}
-          style={{ scrollSnapAlign: 'start', height: '70vh' }}
-        >
+        {[
+          {
+            title: "Nuestra Misión",
+            content: "Crear oportunidades laborales accesibles para todos, conectando talento con empresas que valoran el crecimiento y la diversidad. En MChambas, creemos en un futuro laboral más justo e inclusivo.",
+            image: "[Animación / Imagen de Misión]",
+            reverse: false,
+          },
+          {
+            title: "Nuestra Historia",
+            content: "Tres amigos con experiencias frustrantes en la búsqueda de empleo decidieron crear una plataforma diferente: sin barreras, sin filtros injustos, con tecnología al servicio del talento. Así nació MChambas.",
+            image: "[Animación / Imagen de Historia]",
+            reverse: true,
+          },
+          {
+            title: "Nuestra Visión",
+            content: "Ser la comunidad laboral más confiable de Latinoamérica. Aspiramos a un mundo donde cada persona tenga acceso a un trabajo digno que reconozca su valor y potencial.",
+            image: "[Animación / Imagen de Visión]",
+            reverse: false,
+          },
+        ].map(({ title, content, image, reverse }, i) => (
           <div
-            className="image w-full md:w-1/2 flex items-center justify-center"
-            style={{ minHeight: 0 }}
+            key={i}
+            className={`flex ${reverse ? 'flex-col-reverse md:flex-row-reverse' : 'flex-col md:flex-row'} items-center gap-12 scroll-snap-align-start overflow-hidden`}
+            ref={(el) => setRef(el, i)}
+            style={{ scrollSnapAlign: 'start', height: '70vh' }}
           >
-            <div className="w-full aspect-square bg-gray-100 rounded-lg shadow-md flex items-center justify-center">
-              <span className="text-gray-400">[Animación / Imagen de Misión]</span>
+            {/* Imagen */}
+            <div className="image w-full md:w-1/2 flex items-center justify-center" style={{ minHeight: 0 }}>
+              <div
+                className="w-full aspect-square rounded-lg shadow-md flex items-center justify-center"
+                style={{
+                  backgroundColor: bgCard,
+                  border: `1px solid ${borderColor}`,
+                }}
+              >
+                <span style={{ color: textMuted }}>{image}</span>
+              </div>
             </div>
-          </div>
-          <div
-            className="text w-full md:w-1/2 flex flex-col justify-center"
-            style={{ minHeight: 0, maxHeight: '56vh', overflowY: 'auto', paddingRight: '1rem' }}
-          >
-            <h2
-              className="text-3xl font-bold mb-4"
-              style={{ color: accentColor }}
-            >
-              Nuestra Misión
-            </h2>
-            <p className="text-gray-600">
-              Crear oportunidades laborales accesibles para todos, conectando talento con empresas que valoran el crecimiento y la diversidad. En MChambas, creemos en un futuro laboral más justo e inclusivo.
-            </p>
-          </div>
-        </div>
 
-        <div
-          className="flex flex-col-reverse md:flex-row items-center gap-12 scroll-snap-align-start overflow-hidden"
-          ref={(el) => setRef(el, 1)}
-          style={{ scrollSnapAlign: 'start', height: '70vh' }}
-        >
-          <div
-            className="text w-full md:w-1/2 flex flex-col justify-center"
-            style={{ minHeight: 0, maxHeight: '56vh', overflowY: 'auto', paddingRight: '1rem' }}
-          >
-            <h2
-              className="text-3xl font-bold mb-4"
-              style={{ color: accentColor }}
+            {/* Texto */}
+            <div
+              className="text w-full md:w-1/2 flex flex-col justify-center"
+              style={{
+                minHeight: 0,
+                maxHeight: '56vh',
+                overflowY: 'auto',
+                paddingRight: '1rem',
+              }}
             >
-              Nuestra Historia
-            </h2>
-            <p className="text-gray-600">
-              Tres amigos con experiencias frustrantes en la búsqueda de empleo decidieron crear una plataforma diferente: sin barreras, sin filtros injustos, con tecnología al servicio del talento. Así nació MChambas.
-            </p>
-          </div>
-          <div
-            className="image w-full md:w-1/2 flex items-center justify-center"
-            style={{ minHeight: 0 }}
-          >
-            <div className="w-full aspect-square bg-gray-100 rounded-lg shadow-md flex items-center justify-center">
-              <span className="text-gray-400">[Animación / Imagen de Historia]</span>
+              <h2 className="text-3xl font-bold mb-4" style={{ color: accentColor }}>
+                {title}
+              </h2>
+              <p style={{ color: textMuted }}>{content}</p>
             </div>
           </div>
-        </div>
-
-        <div
-          className="flex flex-col md:flex-row items-center gap-12 scroll-snap-align-start overflow-hidden"
-          ref={(el) => setRef(el, 2)}
-          style={{ scrollSnapAlign: 'start', height: '70vh' }}
-        >
-          <div
-            className="image w-full md:w-1/2 flex items-center justify-center"
-            style={{ minHeight: 0 }}
-          >
-            <div className="w-full aspect-square bg-gray-100 rounded-lg shadow-md flex items-center justify-center">
-              <span className="text-gray-400">[Animación / Imagen de Visión]</span>
-            </div>
-          </div>
-          <div
-            className="text w-full md:w-1/2 flex flex-col justify-center"
-            style={{ minHeight: 0, maxHeight: '56vh', overflowY: 'auto', paddingRight: '1rem' }}
-          >
-            <h2
-              className="text-3xl font-bold mb-4"
-              style={{ color: accentColor }}
-            >
-              Nuestra Visión
-            </h2>
-            <p className="text-gray-600">
-              Ser la comunidad laboral más confiable de Latinoamérica. Aspiramos a un mundo donde cada persona tenga acceso a un trabajo digno que reconozca su valor y potencial.
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
     </section>
   );
