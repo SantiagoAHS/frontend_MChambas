@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import CheckoutForm from "@/components/payments/CheckoutForm";
 import CreditCardDetector from "@/components/payments/Card";
@@ -9,6 +9,7 @@ export default function CheckoutPage() {
   const { id } = useParams();
   const [service, setService] = useState<any>(null);
   const [userName, setUserName] = useState("Cargando...");
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchService() {
@@ -23,25 +24,63 @@ export default function CheckoutPage() {
       const token = localStorage.getItem("token");
       if (!token) return setUserName("Invitado");
 
-      const res = await fetch("http://localhost:8000/api/users/me/", {
+      const res = await fetch("http://localhost:8000/api/user/profile/", {
         headers: { Authorization: `Token ${token}` },
       });
       if (res.ok) {
         const userData = await res.json();
-        setUserName(userData.nombre || userData.username || "Usuario");
+        setUserName(userData.nombre || userData.email || "Usuario");
       } else {
         setUserName("Invitado");
       }
     }
 
     if (id) fetchService();
-    fetchUserName();
-  }, [id]);
+        fetchUserName();
+      }, [id]);
 
   function handleSubmitCheckout(data: any) {
-    console.log("Datos para completar la compra:", data);
-    alert("Formulario enviado, ver consola");
-    // Aquí iría la lógica para enviar los datos a backend y completar el pedido
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Debes iniciar sesión para completar la compra");
+      return;
+    }
+
+    const payload = {
+      servicio: id, // viene de useParams
+      cantidad: 1,
+      address: data.address,
+      city: data.city,
+      state: data.state,
+      postal_code: data.postalCode,
+      phone: data.phone,
+    };
+
+    fetch("http://localhost:8000/api/ventas/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`,
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          const venta = await res.json();
+          alert("Compra realizada con éxito");
+          console.log("Venta creada:", venta);
+
+          router.push("/myorders");
+        } else {
+          const error = await res.json();
+          console.error("Error en la compra:", error);
+          alert("Hubo un problema al procesar tu compra");
+        }
+      })
+      .catch((err) => {
+        console.error("Error de red:", err);
+        alert("No se pudo conectar con el servidor");
+      });
   }
 
   if (!service) return <div className="p-6">Cargando servicio...</div>;

@@ -1,46 +1,63 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type OrderDetail = {
   id: number;
-  service: string;
-  date: string;
-  status: string;
-  price: number;
+  servicio: {
+    title: string;
+    price: number;
+  };
+  fecha: string;
+  estado: string;
+  total: number;
 };
 
-const mockOrders: OrderDetail[] = [
-  {
-    id: 1,
-    service: "Limpieza de hogar",
-    date: "2024-06-10",
-    status: "Completado",
-    price: 350,
-  },
-  {
-    id: 2,
-    service: "Reparación de plomería",
-    date: "2024-06-08",
-    status: "En proceso",
-    price: 500,
-  },
-];
-
 const OrdersDetails: React.FC = () => {
+  const [orders, setOrders] = useState<OrderDetail[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    fetch("http://localhost:8000/api/ventas/mis-pedidos/", {
+      headers: { Authorization: `Token ${token}` },
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          const data = await res.json();
+          setOrders(data);
+        } else {
+          console.error("Error cargando pedidos");
+        }
+      })
+      .catch((err) => console.error("Error de red:", err))
+      .finally(() => setLoading(false));
+  }, []);
+
   const handleViewDetails = (id: number) => {
-    alert(`Ver detalles de la orden con ID: ${id}`);
-    // O podrías usar router.push(`/orders/${id}`) si tienes una página por ID
+    router.push(`/myorders/${id}`);  // Navega a la ruta dinámica del detalle
   };
+
+  if (loading) {
+    return <p style={{ textAlign: "center" }}>Cargando pedidos...</p>;
+  }
 
   return (
     <div style={{ width: "100%", padding: "20px" }}>
       <h1 style={{ textAlign: "center", marginBottom: "24px" }}>Servicios Pedidos</h1>
 
-      {mockOrders.length === 0 ? (
+      {orders.length === 0 ? (
         <p style={{ textAlign: "center" }}>No tienes órdenes registradas.</p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          {mockOrders.map((order) => (
+          {orders.map((order) => (
             <li
               key={order.id}
               style={{
@@ -58,9 +75,11 @@ const OrdersDetails: React.FC = () => {
               }}
             >
               <div style={{ flexGrow: 1 }}>
-                <div style={{ fontWeight: "bold", marginBottom: "4px" }}>{order.service}</div>
+                <div style={{ fontWeight: "bold", marginBottom: "4px" }}>
+                  {order.servicio?.title}
+                </div>
                 <div style={{ color: "#555" }}>
-                  Fecha: {order.date} | Estado: {order.status} | Precio: ${order.price}
+                  Fecha: {new Date(order.fecha).toLocaleDateString()} | Estado: {order.estado} | Precio: ${order.total}
                 </div>
               </div>
               <button

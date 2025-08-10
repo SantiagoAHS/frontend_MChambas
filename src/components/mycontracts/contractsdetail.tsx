@@ -1,48 +1,65 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Contract {
   id: number;
-  title: string;
-  date: string;
-  status: "Completado" | "En curso" | "Cancelado";
-  client: string;
+  servicio: {
+    title: string;
+  };
+  fecha: string;
+  estado: string;
+  comprador: {
+    nombre: string;
+  };
   total: number;
 }
 
-const mockContracts: Contract[] = [
-  {
-    id: 1,
-    title: "Pintura de fachada",
-    date: "2024-05-20",
-    status: "Completado",
-    client: "Carlos Martínez",
-    total: 1500,
-  },
-  {
-    id: 2,
-    title: "Instalación de aire acondicionado",
-    date: "2024-06-12",
-    status: "En curso",
-    client: "Ana Torres",
-    total: 2800,
-  },
-];
-
 const ContractsDetail: React.FC = () => {
+  const router = useRouter();
+  const [contracts, setContracts] = useState<Contract[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    fetch("http://localhost:8000/api/ventas/mis-ventas/", {
+      headers: { Authorization: `Token ${token}` },
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          const data = await res.json();
+          setContracts(data);
+        } else {
+          console.error("Error cargando contratos");
+        }
+      })
+      .catch((err) => console.error("Error de red:", err))
+      .finally(() => setLoading(false));
+  }, []);
+
   const handleView = (id: number) => {
-    alert(`Ver detalles del contrato ${id}`);
+    router.push(`/mycontracts/${id}`);
   };
+
+  if (loading) {
+    return <p style={{ textAlign: "center" }}>Cargando contratos...</p>;
+  }
 
   return (
     <div style={{ width: "100%", padding: "20px" }}>
       <h2 style={{ textAlign: "center", marginBottom: "24px" }}>Mis Contratos</h2>
 
-      {mockContracts.length === 0 ? (
+      {contracts.length === 0 ? (
         <p style={{ textAlign: "center" }}>No tienes contratos aún.</p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0 }}>
-          {mockContracts.map((contract) => (
+          {contracts.map((contract) => (
             <li
               key={contract.id}
               style={{
@@ -59,9 +76,9 @@ const ContractsDetail: React.FC = () => {
               }}
             >
               <div style={{ flexGrow: 1 }}>
-                <div style={{ fontWeight: "bold", marginBottom: "4px" }}>{contract.title}</div>
+                <div style={{ fontWeight: "bold", marginBottom: "4px" }}>{contract.servicio?.title}</div>
                 <div style={{ color: "#555" }}>
-                  Cliente: {contract.client} | Fecha: {contract.date} | Estado: {contract.status} | Total: ${contract.total}
+                  Cliente: {contract.comprador?.nombre} | Fecha: {new Date(contract.fecha).toLocaleDateString()} | Estado: {contract.estado} | Total: ${contract.total}
                 </div>
               </div>
               <button

@@ -1,4 +1,4 @@
-// chat/page.tsx
+// app/mycontracts/page.tsx
 "use client";
 import React from "react";
 import Sidebar from "@/components/sidebar/Sidebar";
