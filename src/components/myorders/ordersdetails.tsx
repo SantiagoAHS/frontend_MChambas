@@ -6,9 +6,8 @@ import { useTheme } from "@/context/ThemeContext";
 
 type OrderDetail = {
   id: number;
-  servicio: {
+  servicio_detalle: {
     title: string;
-    price: number;
   };
   fecha: string;
   estado: string;
@@ -108,7 +107,7 @@ const OrdersDetails: React.FC = () => {
             >
               <div style={{ flexGrow: 1 }}>
                 <div style={{ fontWeight: "bold", marginBottom: "4px" }}>
-                  {order.servicio?.title}
+                  {order.servicio_detalle?.title || "Título no disponible"}
                 </div>
                 <div style={{ color: secondaryText }}>
                   Fecha: {new Date(order.fecha).toLocaleDateString()} | Estado: {order.estado} | Precio: ${order.total}
