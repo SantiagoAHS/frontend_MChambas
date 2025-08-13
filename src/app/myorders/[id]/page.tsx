@@ -1,4 +1,3 @@
-// app/myorders/[id]/page.tsx
 "use client";
 
 import { useParams } from "next/navigation";
@@ -41,8 +40,12 @@ export default function MyOrderDetailPage() {
 
   return (
     <section className="max-w-3xl mx-auto p-4 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Detalle del Pedido #{order.id}</h1>
-      <p><strong>Servicio:</strong> {order.servicio.title}</p>
+      <h1 className="text-2xl font-bold mb-4">
+        {order.servicio_detalle?.title
+          ? `Detalle del Pedido: ${order.servicio_detalle.title}`
+          : `Detalle del Pedido #${order.id}`}
+      </h1>
+
       <p><strong>Cantidad:</strong> {order.cantidad}</p>
       <p><strong>Total:</strong> ${order.total}</p>
       <p><strong>Estado:</strong> {order.estado}</p>

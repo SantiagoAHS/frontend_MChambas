@@ -5,14 +5,12 @@ import { useRouter } from "next/navigation";
 
 interface Contract {
   id: number;
-  servicio: {
+  servicio_detalle: {
     title: string;
   };
   fecha: string;
   estado: string;
-  comprador: {
-    nombre: string;
-  };
+  comprador: string;  // Ahora es string
   total: number;
 }
 
@@ -34,6 +32,7 @@ const ContractsDetail: React.FC = () => {
       .then(async (res) => {
         if (res.ok) {
           const data = await res.json();
+          console.log("Respuesta contratos:", data);
           setContracts(data);
         } else {
           console.error("Error cargando contratos");
@@ -74,10 +73,10 @@ const ContractsDetail: React.FC = () => {
             >
               <div>
                 <div style={{ fontWeight: "bold", marginBottom: "4px" }}>
-                  {contract.servicio?.title}
+                  {contract.servicio_detalle?.title || "Título no disponible"}
                 </div>
                 <div style={{ color: "#555" }}>
-                  Cliente: {contract.comprador?.nombre} | Fecha:{" "}
+                  Cliente: {contract.comprador || "Nombre no disponible"} | Fecha:{" "}
                   {new Date(contract.fecha).toLocaleDateString()} | Estado:{" "}
                   {contract.estado} | Total: ${contract.total}
                 </div>

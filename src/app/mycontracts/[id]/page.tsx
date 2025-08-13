@@ -3,13 +3,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
+interface ServicioDetalle {
+  title: string;
+  price: number;
+  description?: string;
+}
+
 interface ContractDetail {
   id: number;
-  servicio: {
-    title: string;
-    price: number;
-    description?: string;
-  };
+  servicio_detalle: ServicioDetalle;
   fecha: string;
   estado: string;
   comprador: string;
@@ -35,7 +37,6 @@ export default function ContractDetailPage() {
 
     const token = localStorage.getItem("token");
     if (!token) {
-      // Puedes redirigir o mostrar mensaje de error
       setLoading(false);
       return;
     }
@@ -49,7 +50,7 @@ export default function ContractDetailPage() {
         if (res.ok) {
           const data = await res.json();
           setContract(data);
-          setNewStatus(data.estado); // inicializa el estado para el select
+          setNewStatus(data.estado); // Inicializamos el select con el estado actual
         } else {
           console.error("Error al cargar detalle del contrato");
         }
@@ -95,10 +96,12 @@ export default function ContractDetailPage() {
 
   return (
     <section className="max-w-3xl mx-auto p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">{contract.servicio.title}</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        {contract.servicio_detalle?.title || "Título no disponible"}
+      </h1>
       <p><strong>Cliente:</strong> {contract.comprador}</p>
       <p><strong>Fecha:</strong> {new Date(contract.fecha).toLocaleDateString()}</p>
-      
+
       <p>
         <strong>Estado:</strong>{" "}
         <select
@@ -124,8 +127,6 @@ export default function ContractDetailPage() {
       <p><strong>Total:</strong> ${contract.total}</p>
       <p><strong>Dirección:</strong> {contract.address}, {contract.city}, {contract.state}, {contract.postal_code}</p>
       <p><strong>Teléfono:</strong> {contract.phone}</p>
-
-      {/* Puedes agregar más detalles o botones aquí */}
     </section>
   );
 }
