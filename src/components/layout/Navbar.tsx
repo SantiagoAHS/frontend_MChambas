@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const dropdownRef = useRef<HTMLLIElement | null>(null);
 
   const { theme, toggleTheme } = useTheme(); 
 
@@ -52,7 +52,6 @@ const Navbar: React.FC = () => {
         </div>
 
         <ul className="flex space-x-6 text-sm font-medium text-gray-700 items-center">
-          <li><Link href="/offers" className={`hover:text-red-600 ${pathname === "/offers" ? "text-orange-500 border-b-2 border-orange-500 pb-1" : ""}`}>Ofertas</Link></li>
           <li><Link href="/services" className={`hover:text-red-600 ${pathname === "/services" ? "text-orange-500 border-b-2 border-orange-500 pb-1" : ""}`}>Servicios</Link></li>
           <li><Link href="/myorders" className={`hover:text-red-600 ${pathname === "/myorders" ? "text-orange-500 border-b-2 border-orange-500 pb-1" : ""}`}>Mis pedidos</Link></li>
           <li><Link href="/help" className={`hover:text-red-600 ${pathname === "/help" ? "text-orange-500 border-b-2 border-orange-500 pb-1" : ""}`}>Ayuda</Link></li>
