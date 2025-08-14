@@ -122,17 +122,21 @@ export default function AboutPage() {
             style={{ scrollSnapAlign: 'start', height: '70vh' }}
           >
             {/* Imagen */}
-            <div className="image w-full md:w-1/2 flex items-center justify-center" style={{ minHeight: 0 }}>
+            <div 
+              className="image w-full md:w-1/2 flex items-center justify-center mb-6 md:mb-0" 
+              style={{ minHeight: 0, maxHeight: '40vh' }}
+            >
               <div
-                className="w-full aspect-square rounded-lg shadow-md flex items-center justify-center"
+                className="w-full max-w-md aspect-square rounded-lg shadow-md flex items-center justify-center"
                 style={{
                   backgroundColor: bgCard,
                   border: `1px solid ${borderColor}`,
-                }}
+                }}run 
               >
                 <span style={{ color: textMuted }}>{image}</span>
               </div>
             </div>
+
 
             {/* Texto */}
             <div
