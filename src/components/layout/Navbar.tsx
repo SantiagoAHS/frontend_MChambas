@@ -15,6 +15,7 @@ const Navbar: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLUListElement | null>(null); // Nuevo ref para hamburguesa
 
+
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -85,6 +86,7 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
 
+
         {/* Links de navegación */}
         <ul
           ref={menuRef}
@@ -93,6 +95,7 @@ const Navbar: React.FC = () => {
           } flex-col absolute top-20 left-0 w-auto bg-white border border-gray-200 shadow-md rounded-md p-2
           lg:bg-transparent lg:border-none lg:shadow-none lg:static lg:flex lg:flex-row lg:items-center lg:space-x-6 text-sm font-medium text-gray-700 dark:text-white z-50`}
         >
+
           <li>
             <Link
               href="/offers"
