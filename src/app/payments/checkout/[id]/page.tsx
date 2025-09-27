@@ -2,14 +2,16 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTheme } from "@/context/ThemeContext";
 import CheckoutForm from "@/components/payments/CheckoutForm";
-import CreditCardDetector from "@/components/payments/Card";
 
 export default function CheckoutPage() {
   const { id } = useParams();
+  const router = useRouter();
+  const { theme } = useTheme();
+
   const [service, setService] = useState<any>(null);
   const [userName, setUserName] = useState("Cargando...");
-  const router = useRouter();
 
   useEffect(() => {
     async function fetchService() {
@@ -36,8 +38,8 @@ export default function CheckoutPage() {
     }
 
     if (id) fetchService();
-        fetchUserName();
-      }, [id]);
+    fetchUserName();
+  }, [id]);
 
   function handleSubmitCheckout(data: any) {
     const token = localStorage.getItem("token");
@@ -47,7 +49,7 @@ export default function CheckoutPage() {
     }
 
     const payload = {
-      servicio: id, // viene de useParams
+      servicio: id,
       cantidad: 1,
       address: data.address,
       city: data.city,
@@ -60,16 +62,14 @@ export default function CheckoutPage() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Token ${token}`,
+        Authorization: `Token ${token}`,
       },
       body: JSON.stringify(payload),
     })
       .then(async (res) => {
         if (res.ok) {
-          const venta = await res.json();
+          await res.json();
           alert("Compra realizada con éxito");
-          console.log("Venta creada:", venta);
-
           router.push("/myorders");
         } else {
           const error = await res.json();
@@ -83,19 +83,49 @@ export default function CheckoutPage() {
       });
   }
 
-  if (!service) return <div className="p-6">Cargando servicio...</div>;
+  if (!service) {
+    return (
+      <div
+        className={`p-6 ${
+          theme === "dark" ? "bg-[#2a2a2a] text-white" : "bg-gray-100 text-black"
+        }`}
+      >
+        Cargando servicio...
+      </div>
+    );
+  }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Contratar Servicio</h1>
+    <div
+      className={`p-6 min-h-screen transition-colors duration-300 ${
+        theme === "dark" ? "bg-[#3a3a3a] text-white" : "bg-gray-50 text-black"
+      }`}
+    >
+      <h1 className="text-2xl font-bold mb-6 text-orange-600">
+        Contratar Servicio
+      </h1>
+
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Izquierda: detalles del servicio + tarjeta */}
         <div className="md:w-3/5 flex flex-col gap-8">
-          <div className="bg-white p-6 rounded shadow">
-            <h2 className="text-xl font-semibold mb-4">Detalles del Servicio</h2>
-            <p><strong>Servicio:</strong> {service.title}</p>
-            <p><strong>Precio:</strong> {service.price}</p>
-            <p><strong>Proveedor:</strong> {service.provider.nombre}</p>
+          <div
+            className={`p-6 rounded-lg shadow transition-all duration-300 border ${
+              theme === "dark"
+                ? "bg-[#2a2a2a] border-[#2a2a2a]"
+                : "bg-white border-white"
+            }`}
+          >
+            <h2 className="text-xl font-semibold mb-4 text-orange-600">
+              Detalles del Servicio
+            </h2>
+            <p>
+              <strong>Servicio:</strong> {service.title}
+            </p>
+            <p>
+              <strong>Precio:</strong> {service.price}
+            </p>
+            <p>
+              <strong>Proveedor:</strong> {service.provider.nombre}
+            </p>
             {service.image && (
               <img
                 src={`http://localhost:8000${service.image}`}
@@ -104,16 +134,18 @@ export default function CheckoutPage() {
               />
             )}
           </div>
-
-          <div className="bg-white p-6 rounded shadow">
-            <h2 className="text-xl font-semibold mb-4">Datos de Tarjeta</h2>
-            <CreditCardDetector />
-          </div>
         </div>
 
-        {/* Derecha: formulario */}
-        <div className="md:w-2/5 bg-white p-6 rounded shadow">
-          <h2 className="text-xl font-semibold mb-4">Completar Datos</h2>
+        <div
+          className={`md:w-2/5 p-6 rounded-lg shadow transition-all duration-300 border ${
+            theme === "dark"
+              ? "bg-[#2a2a2a] border-[#2a2a2a]"
+              : "bg-white border-white"
+          }`}
+        >
+          <h2 className="text-xl font-semibold mb-4 text-orange-600">
+            Completar Datos
+          </h2>
           <CheckoutForm userName={userName} onSubmit={handleSubmitCheckout} />
         </div>
       </div>

@@ -1,5 +1,9 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '@/context/ThemeContext';
+import { loadStripe } from '@stripe/stripe-js';
+import { CardElement, useStripe, useElements, Elements } from '@stripe/react-stripe-js';
 
 interface Tarjeta {
   id: number;
@@ -7,189 +11,185 @@ interface Tarjeta {
   numero_enmascarado: string;
   exp_mes: number;
   exp_ano: number;
+  default?: boolean;
 }
 
-const TarjetasManager: React.FC = () => {
-  const [tarjetas, setTarjetas] = useState<Tarjeta[]>([]);
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardHolder, setCardHolder] = useState('');
-  const [expiry, setExpiry] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [message, setMessage] = useState('');
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK || '');
 
-  // Carga las tarjetas guardadas desde la API
-  useEffect(() => {
+const TarjetasForm: React.FC<{ onSaved: (t: Tarjeta) => void }> = ({ onSaved }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const [tarjetas, setTarjetas] = useState<Tarjeta[]>([]);
+  const [cardHolder, setCardHolder] = useState('');
+  const [message, setMessage] = useState('');
+
+  // Cargar tarjetas desde API
+  const fetchTarjetas = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
-
-    fetch('http://localhost:8000/api/pagos/tarjetas/', {
-      headers: { Authorization: `Token ${token}` },
-    })
-      .then(res => res.json())
-      .then(data => setTarjetas(data))
-      .catch(() => setMessage('Error cargando tarjetas'));
-  }, []);
-
-  // Cuando cambias selección, carga datos en formulario
-  const handleSelectTarjeta = (id: number) => {
-    setSelectedId(id);
-    const tarjeta = tarjetas.find(t => t.id === id);
-    if (tarjeta) {
-      setCardHolder(tarjeta.nombre_titular);
-      // No se puede rellenar número completo, solo enmascarado, dejamos vacío para que el usuario ingrese
-      setCardNumber('');
-      // Formatear MM/AA
-      const mesStr = String(tarjeta.exp_mes).padStart(2, '0');
-      const anoStr = String(tarjeta.exp_ano).slice(-2);
-      setExpiry(`${mesStr}/${anoStr}`);
-      setCvv('');
-      setMessage('');
+    try {
+      const res = await fetch('http://localhost:8000/api/pagos/tarjetas/', {
+        headers: { Authorization: `Token ${token}` },
+      });
+      const data = await res.json();
+      setTarjetas(data);
+    } catch {
+      setMessage('Error cargando tarjetas');
     }
   };
 
-  // Función para guardar tarjeta nueva o actualizar
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => { fetchTarjetas(); }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage('');
 
-    if (
-      cardHolder.trim() === '' ||
-      cardNumber.length < 13 ||
-      !/^\d{2}\/\d{2}$/.test(expiry) ||
-      !/^\d{3,4}$/.test(cvv)
-    ) {
-      setMessage('Por favor, completa todos los campos correctamente.');
-      return;
+    if (!stripe || !elements) { setMessage('Stripe no está cargado'); return; }
+    if (!cardHolder.trim()) { setMessage('Ingresa el nombre del titular'); return; }
+
+    const cardElement = elements.getElement(CardElement);
+    if (!cardElement) return;
+
+    try {
+      const token = localStorage.getItem('token');
+
+      // 1. Crear SetupIntent
+      const intentRes = await fetch('http://localhost:8000/api/pagos/stripe/setup-intent/', {
+        method: 'POST',
+        headers: { Authorization: `Token ${token}` },
+      });
+      const { client_secret } = await intentRes.json();
+
+      // 2. Confirmar método de pago
+      const result = await stripe.confirmCardSetup(client_secret, {
+        payment_method: { card: cardElement, billing_details: { name: cardHolder } },
+      });
+
+      if (result.error) { setMessage(result.error.message || 'Error creando método de pago'); return; }
+
+      const setupIntent = result.setupIntent;
+
+      // 3. Guardar en backend
+      const saveRes = await fetch('http://localhost:8000/api/pagos/stripe/attach-payment-method/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Token ${token}` },
+        body: JSON.stringify({ payment_method_id: setupIntent.payment_method }),
+      });
+
+      if (!saveRes.ok) { const err = await saveRes.json(); setMessage('Error guardando tarjeta: ' + JSON.stringify(err)); return; }
+
+      const nuevaTarjeta: Tarjeta = await saveRes.json();
+
+      setTarjetas(prev => [...prev, nuevaTarjeta]);
+      onSaved(nuevaTarjeta);
+      setCardHolder('');
+      setMessage('Tarjeta guardada y verificada correctamente');
+    } catch (err) {
+      console.error(err);
+      setMessage('Error al guardar la tarjeta');
     }
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setMessage('Debes iniciar sesión para guardar tarjetas');
-      return;
-    }
-
-    const [mesStr, anoStr] = expiry.split('/');
-    const exp_mes = parseInt(mesStr, 10);
-    const exp_ano = 2000 + parseInt(anoStr, 10);
-
-    const payload = {
-      numero: cardNumber,
-      nombre_titular: cardHolder,
-      exp_mes,
-      exp_ano,
-    };
-
-    fetch('http://localhost:8000/api/pagos/tarjetas/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
-      },
-      body: JSON.stringify(payload),
-    })
-      .then(async res => {
-        if (res.ok) {
-          const nuevaTarjeta = await res.json();
-          setTarjetas([...tarjetas, nuevaTarjeta]);
-          setMessage('Tarjeta guardada correctamente');
-          setSelectedId(null);
-          setCardNumber('');
-          setCardHolder('');
-          setExpiry('');
-          setCvv('');
-        } else {
-          const error = await res.json();
-          setMessage('Error guardando tarjeta: ' + (error.detail || JSON.stringify(error)));
-        }
-      })
-      .catch(() => setMessage('Error de conexión con el servidor'));
   };
 
+  // Eliminar tarjeta
+  const handleEliminar = async (id: number) => {
+    const token = localStorage.getItem('token');
+    try {
+      await fetch(`http://localhost:8000/api/pagos/tarjetas/${id}/`, {
+        method: 'DELETE',
+        headers: { Authorization: `Token ${token}` }
+      });
+      setTarjetas(prev => prev.filter(t => t.id !== id));
+    } catch {
+      setMessage('Error eliminando tarjeta');
+    }
+  };
+
+  // Marcar tarjeta como por defecto
+  const handleDefault = async (id: number) => {
+    const token = localStorage.getItem('token');
+    setMessage(''); // limpiar mensajes previos
+    try {
+      // 1. Llamar al backend para marcar la tarjeta por defecto
+      const res = await fetch(`http://localhost:8000/api/pagos/tarjetas/${id}/set-default/`, {
+        method: 'POST',
+        headers: { Authorization: `Token ${token}` }
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        setMessage('Error estableciendo tarjeta por defecto: ' + (err.detail || err.error));
+        return;
+      }
+
+      // 2. Recargar la lista de tarjetas desde la API para reflejar cambios
+      await fetchTarjetas(); // actualizamos tarjetas desde el backend
+
+    } catch {
+      setMessage('Error estableciendo tarjeta por defecto');
+    }
+  };
+
+  const borderColor = isDark ? 'border-purple-600 focus:border-purple-600 focus:ring-purple-600'
+                             : 'border-green-600 focus:border-green-600 focus:ring-green-600';
+  const buttonStyle = isDark ? 'bg-purple-600 text-white border-purple-600 hover:bg-white hover:text-purple-600'
+                             : 'bg-green-600 text-white border-green-600 hover:bg-white hover:text-green-600';
+  const containerBg = isDark ? 'bg-[#2a2a2a] border-gray-600' : 'bg-white border-gray-300';
+  const inputBg = isDark ? 'bg-[#1f1f1f] text-white border-gray-500' : 'bg-white text-gray-800 border-gray-300';
+  const textColor = isDark ? 'text-white' : 'text-black';
+
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded shadow space-y-6">
+    <div className={`max-w-xl mx-auto p-6 rounded-lg shadow space-y-6 transition-colors duration-300 border ${containerBg} ${textColor}`}>
       <h2 className="text-xl font-bold">Tus tarjetas guardadas</h2>
 
       {tarjetas.length > 0 && (
-        <select
-          className="w-full border p-2 rounded"
-          value={selectedId ?? ''}
-          onChange={e => handleSelectTarjeta(Number(e.target.value))}
-        >
-          <option value="" disabled>
-            Selecciona una tarjeta para usar
-          </option>
+        <ul className="mb-4 space-y-2">
           {tarjetas.map(t => (
-            <option key={t.id} value={t.id}>
-              {t.nombre_titular} - {t.numero_enmascarado} - Expira {String(t.exp_mes).padStart(2, '0')}/{String(t.exp_ano).slice(-2)}
-            </option>
+            <li key={t.id} className="flex justify-between items-center">
+              <span>
+                {t.nombre_titular} - {t.numero_enmascarado} - Expira {String(t.exp_mes).padStart(2,'0')}/{String(t.exp_ano).slice(-2)}
+                {t.default && ' (Por defecto)'}
+              </span>
+              <div className="flex gap-2">
+                {!t.default && <button onClick={() => handleDefault(t.id)} className="text-blue-600 hover:underline">Por defecto</button>}
+                <button onClick={() => handleEliminar(t.id)} className="text-red-600 hover:underline">Eliminar</button>
+              </div>
+            </li>
           ))}
-        </select>
+        </ul>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-medium">Nombre del titular</label>
-          <input
-            type="text"
-            value={cardHolder}
-            onChange={e => setCardHolder(e.target.value.toUpperCase())}
-            className="w-full border p-2 rounded"
-            placeholder="JUAN PEREZ"
-            maxLength={30}
-          />
+          <input type="text" value={cardHolder} onChange={e => setCardHolder(e.target.value.toUpperCase())}
+                 className={`w-full border p-2 rounded ${inputBg} ${borderColor} focus:ring-2 focus:outline-none`} placeholder="JUAN PEREZ" maxLength={30}/>
         </div>
+
         <div>
-          <label className="block font-medium">Número de tarjeta</label>
-          <input
-            type="text"
-            value={cardNumber}
-            onChange={e => setCardNumber(e.target.value.replace(/\D/g, '').slice(0, 16))}
-            className="w-full border p-2 rounded font-mono tracking-widest"
-            placeholder="Solo números"
-            maxLength={16}
-          />
-        </div>
-        <div className="flex space-x-4">
-          <div className="flex-1">
-            <label className="block font-medium">Fecha expiración (MM/AA)</label>
-            <input
-              type="text"
-              value={expiry}
-              onChange={e => {
-                let val = e.target.value.replace(/\D/g, '');
-                if (val.length > 4) val = val.slice(0, 4);
-                if (val.length > 2) val = val.slice(0, 2) + '/' + val.slice(2);
-                setExpiry(val);
-              }}
-              className="w-full border p-2 rounded"
-              placeholder="MM/AA"
-              maxLength={5}
-            />
-          </div>
-          <div className="flex-1">
-            <label className="block font-medium">CVV</label>
-            <input
-              type="password"
-              value={cvv}
-              onChange={e => setCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
-              className="w-full border p-2 rounded font-mono tracking-widest"
-              placeholder="***"
-              maxLength={4}
-            />
+          <label className="block font-medium">Datos de la tarjeta</label>
+          <div className={`border p-2 rounded ${inputBg} ${borderColor} focus:ring-2 focus:outline-none`}>
+            <CardElement options={{ style: { base: { color: isDark ? 'white' : 'black', fontSize: '16px' } } }}/>
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
-        >
+        <button type="submit" className={`w-full py-2 rounded-lg font-semibold border-2 transition duration-200 ${buttonStyle}`}>
           Guardar tarjeta
         </button>
 
         {message && <p className="mt-2 text-center text-red-600">{message}</p>}
       </form>
     </div>
+  );
+};
+
+const TarjetasManager: React.FC = () => {
+  return (
+    <Elements stripe={stripePromise}>
+      <TarjetasForm onSaved={() => {}} />
+    </Elements>
   );
 };
 

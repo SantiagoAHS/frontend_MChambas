@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useTheme } from "@/context/ThemeContext";
 
 interface CheckoutFormProps {
-  userName: string; // nombre que ya tienes del usuario autenticado
+  userName: string;
   onSubmit: (data: CheckoutData) => void;
 }
 
@@ -24,9 +25,12 @@ export default function CheckoutForm({ userName, onSubmit }: CheckoutFormProps) 
     phone: "",
   });
 
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -34,20 +38,44 @@ export default function CheckoutForm({ userName, onSubmit }: CheckoutFormProps) 
     onSubmit(formData);
   }
 
+  // Bordes con color (como en el primer código)
+  const borderColor = isDark
+    ? "border-purple-600 focus:border-purple-600 focus:ring-purple-600"
+    : "border-green-600 focus:border-green-600 focus:ring-green-600";
+
+  // Botón original del segundo código
+  const button = isDark
+    ? "bg-purple-600 text-white border-purple-600 hover:bg-white hover:text-purple-600"
+    : "bg-green-600 text-white border-green-600 hover:bg-white hover:text-green-600";
+
+  // Colores de fondo/texto de inputs y contenedor
+  const inputBase = isDark
+    ? "bg-[#1f1f1f] text-white border-gray-500"
+    : "bg-white text-gray-800 border-gray-300";
+
+  const container = isDark
+    ? "bg-[#2a2a2a] border-gray-600 text-white"
+    : "bg-white border-gray-300 text-gray-800";
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 bg-white rounded shadow space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className={`max-w-xl mx-auto p-6 rounded-lg shadow space-y-6 transition-colors duration-300 border ${container}`}
+    >
       <div>
         <label className="block font-semibold mb-1">Nombre:</label>
         <input
           type="text"
           value={userName}
           disabled
-          className="w-full border px-3 py-2 rounded bg-gray-100 cursor-not-allowed"
+          className={`w-full px-3 py-2 rounded cursor-not-allowed border ${inputBase} ${borderColor} focus:ring-2 focus:outline-none`}
         />
       </div>
 
       <div>
-        <label className="block font-semibold mb-1" htmlFor="address">Dirección</label>
+        <label className="block font-semibold mb-1" htmlFor="address">
+          Dirección
+        </label>
         <input
           type="text"
           id="address"
@@ -56,12 +84,14 @@ export default function CheckoutForm({ userName, onSubmit }: CheckoutFormProps) 
           onChange={handleChange}
           required
           placeholder="Calle y número"
-          className="w-full border px-3 py-2 rounded"
+          className={`w-full px-3 py-2 rounded border ${inputBase} ${borderColor} focus:ring-2 focus:outline-none`}
         />
       </div>
 
       <div>
-        <label className="block font-semibold mb-1" htmlFor="city">Ciudad</label>
+        <label className="block font-semibold mb-1" htmlFor="city">
+          Ciudad
+        </label>
         <input
           type="text"
           id="city"
@@ -70,12 +100,14 @@ export default function CheckoutForm({ userName, onSubmit }: CheckoutFormProps) 
           onChange={handleChange}
           required
           placeholder="Ciudad"
-          className="w-full border px-3 py-2 rounded"
+          className={`w-full px-3 py-2 rounded border ${inputBase} ${borderColor} focus:ring-2 focus:outline-none`}
         />
       </div>
 
       <div>
-        <label className="block font-semibold mb-1" htmlFor="state">Estado/Provincia</label>
+        <label className="block font-semibold mb-1" htmlFor="state">
+          Estado/Provincia
+        </label>
         <input
           type="text"
           id="state"
@@ -84,12 +116,14 @@ export default function CheckoutForm({ userName, onSubmit }: CheckoutFormProps) 
           onChange={handleChange}
           required
           placeholder="Estado o provincia"
-          className="w-full border px-3 py-2 rounded"
+          className={`w-full px-3 py-2 rounded border ${inputBase} ${borderColor} focus:ring-2 focus:outline-none`}
         />
       </div>
 
       <div>
-        <label className="block font-semibold mb-1" htmlFor="postalCode">Código Postal</label>
+        <label className="block font-semibold mb-1" htmlFor="postalCode">
+          Código Postal
+        </label>
         <input
           type="text"
           id="postalCode"
@@ -98,12 +132,14 @@ export default function CheckoutForm({ userName, onSubmit }: CheckoutFormProps) 
           onChange={handleChange}
           required
           placeholder="Código postal"
-          className="w-full border px-3 py-2 rounded"
+          className={`w-full px-3 py-2 rounded border ${inputBase} ${borderColor} focus:ring-2 focus:outline-none`}
         />
       </div>
 
       <div>
-        <label className="block font-semibold mb-1" htmlFor="phone">Teléfono</label>
+        <label className="block font-semibold mb-1" htmlFor="phone">
+          Teléfono
+        </label>
         <input
           type="tel"
           id="phone"
@@ -112,13 +148,13 @@ export default function CheckoutForm({ userName, onSubmit }: CheckoutFormProps) 
           onChange={handleChange}
           required
           placeholder="Número de teléfono"
-          className="w-full border px-3 py-2 rounded"
+          className={`w-full px-3 py-2 rounded border ${inputBase} ${borderColor} focus:ring-2 focus:outline-none`}
         />
       </div>
 
       <button
         type="submit"
-        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+        className={`w-full py-2 rounded-lg font-semibold border-2 transition duration-200 ${button}`}
       >
         Completar Compra
       </button>
