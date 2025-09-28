@@ -12,6 +12,7 @@ export default function CheckoutPage() {
 
   const [service, setService] = useState<any>(null);
   const [userName, setUserName] = useState("Cargando...");
+  const [tarjetaSeleccionada, setTarjetaSeleccionada] = useState<any>(null);
 
   useEffect(() => {
     async function fetchService() {
@@ -37,8 +38,27 @@ export default function CheckoutPage() {
       }
     }
 
+    async function fetchTarjetaDefault() {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const res = await fetch("http://localhost:8000/api/pagos/tarjetas/", {
+          headers: { Authorization: `Token ${token}` },
+        });
+        if (!res.ok) return;
+
+        const data = await res.json();
+        const defaultCard = data.find((t: any) => t.default);
+        setTarjetaSeleccionada(defaultCard || null);
+      } catch (err) {
+        console.error("Error cargando tarjetas:", err);
+      }
+    }
+
     if (id) fetchService();
     fetchUserName();
+    fetchTarjetaDefault();
   }, [id]);
 
   function handleSubmitCheckout(data: any) {
@@ -69,7 +89,7 @@ export default function CheckoutPage() {
       .then(async (res) => {
         if (res.ok) {
           await res.json();
-          alert("Compra realizada con éxito");
+          alert("Compra realizada con éxito (simulada)");
           router.push("/myorders");
         } else {
           const error = await res.json();
@@ -106,12 +126,13 @@ export default function CheckoutPage() {
       </h1>
 
       <div className="flex flex-col md:flex-row gap-8">
-        <div className="md:w-3/5 flex flex-col gap-8">
+        {/* Detalles del Servicio */}
+        <div className="md:w-3/5 flex flex-col gap-4">
           <div
             className={`p-6 rounded-lg shadow transition-all duration-300 border ${
               theme === "dark"
                 ? "bg-[#2a2a2a] border-[#2a2a2a]"
-                : "bg-white border-white"
+                : "bg-white border-gray-200"
             }`}
           >
             <h2 className="text-xl font-semibold mb-4 text-orange-600">
@@ -134,18 +155,59 @@ export default function CheckoutPage() {
               />
             )}
           </div>
+          {/* Mensaje de seguridad */}
+          <div
+            className={`mt-4 p-4 rounded-lg border-l-4 ${
+              theme === "dark"
+                ? "bg-[#2a2a2a] border-orange-500 text-gray-200"
+                : "bg-orange-50 border-orange-500 text-gray-800"
+            }`}
+          >
+            <h3 className="font-semibold mb-2">Pago protegido</h3>
+            <ul className="list-disc pl-5 space-y-1 text-sm">
+              <li>Si el vendedor cancela la transacción, tu pago será reembolsado automáticamente.</li>
+              <li>Si el vendedor no responde en un tiempo razonable, tu dinero será regresado.</li>
+              <li>Para más información o soporte, contacta a <strong>soporte@tuservicio.com</strong>.</li>
+            </ul>
+          </div>
         </div>
 
+        {/* Checkout y Tarjeta Seleccionada */}
         <div
           className={`md:w-2/5 p-6 rounded-lg shadow transition-all duration-300 border ${
             theme === "dark"
-              ? "bg-[#2a2a2a] border-[#2a2a2a]"
-              : "bg-white border-white"
+              ? "bg-[#2e2e2e] border-gray-600"
+              : "bg-gray-100 border-gray-200"
           }`}
         >
           <h2 className="text-xl font-semibold mb-4 text-orange-600">
             Completar Datos
           </h2>
+
+          {tarjetaSeleccionada ? (
+            <div
+              className={`mb-4 p-4 border rounded ${
+                theme === "dark"
+                  ? "bg-[#1f1f1f] border-gray-600 text-white"
+                  : "bg-white border-gray-300 text-black"
+              }`}
+            >
+              <p>
+                <strong>Tarjeta seleccionada:</strong> {tarjetaSeleccionada.nombre_titular}
+              </p>
+              <p>
+                {tarjetaSeleccionada.numero_enmascarado} - Expira{" "}
+                {String(tarjetaSeleccionada.exp_mes).padStart(2, "0")}/
+                {String(tarjetaSeleccionada.exp_ano).slice(-2)}
+              </p>
+              <p className="mt-2 text-sm text-gray-500">
+                Pago simulado: no se realizará ningún cargo.
+              </p>
+            </div>
+          ) : (
+            <p className="mb-4">No tienes ninguna tarjeta por defecto</p>
+          )}
+
           <CheckoutForm userName={userName} onSubmit={handleSubmitCheckout} />
         </div>
       </div>

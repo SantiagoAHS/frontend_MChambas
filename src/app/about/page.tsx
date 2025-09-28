@@ -131,7 +131,7 @@ export default function AboutPage() {
                 style={{
                   backgroundColor: bgCard,
                   border: `1px solid ${borderColor}`,
-                }}run 
+                }}
               >
                 <span style={{ color: textMuted }}>{image}</span>
               </div>

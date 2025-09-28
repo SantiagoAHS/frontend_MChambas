@@ -167,6 +167,23 @@ export default function ContractDetailPage() {
       <p>
         <strong>Teléfono:</strong> {contract.phone}
       </p>
+
+      {/* Contenedor de reglas / seguridad */}
+      <div
+        className={`mt-6 p-4 rounded-lg border-l-4 ${
+          theme === "dark"
+            ? "bg-[#2a2a2a] border-orange-500 text-gray-200"
+            : "bg-orange-50 border-orange-500 text-gray-800"
+        }`}
+      >
+        <h3 className="font-semibold mb-2">Reglas de pago y seguridad</h3>
+        <ul className="list-disc pl-5 space-y-1 text-sm">
+          <li>El pago se registra pero no se entrega al vendedor hasta que el servicio esté completado.</li>
+          <li>Si el vendedor cancela la transacción, el pago será reembolsado automáticamente.</li>
+          <li>Si el vendedor no responde en un tiempo razonable, el dinero será regresado.</li>
+          <li>Para más información o soporte, contacta a <strong>soporte@mrchambasmx.com</strong>.</li>
+        </ul>
+      </div>
     </section>
   );
 }

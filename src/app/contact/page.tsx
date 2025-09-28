@@ -12,7 +12,7 @@ const contactDetails = [
   {
     icon: EnvelopeIcon,
     title: 'Correo electrónico',
-    value: 'contacto@gmail.com',
+    value: 'mrchambasmx@gmail.com',
   },
   {
     icon: ClockIcon,

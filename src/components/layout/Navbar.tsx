@@ -134,18 +134,6 @@ const Navbar: React.FC = () => {
           </li>
           <li>
             <Link
-              href="/help"
-              className={`block px-4 py-2 hover:text-red-600 ${
-                pathname === "/help"
-                  ? "text-orange-500 border-b-2 border-orange-500 lg:pb-1"
-                  : ""
-              }`}
-            >
-              Ayuda
-            </Link>
-          </li>
-          <li>
-            <Link
               href="/about"
               className={`block px-4 py-2 hover:text-red-600 ${
                 pathname === "/about"

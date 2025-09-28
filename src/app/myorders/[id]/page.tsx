@@ -71,6 +71,52 @@ export default function MyOrderDetailPage() {
       <p><strong>Dirección:</strong> {order.address}, {order.city}, {order.state}, {order.postal_code}</p>
       <p><strong>Teléfono:</strong> {order.phone}</p>
       <p><strong>Comprador:</strong> {order.comprador}</p>
+      {order.estado === "cancelado" && (
+        <div
+          className={`mt-4 p-4 rounded-lg border-l-4 ${
+            theme === "dark"
+              ? "bg-red-900 border-red-500 text-red-200"
+              : "bg-red-100 border-red-500 text-red-700"
+          }`}
+        >
+          <h3 className="font-semibold">El vendedor canceló el pedido</h3>
+          <p className="text-sm mt-1">
+            El vendedor no completó el servicio. Tu dinero será reembolsado y se verá reflejado en tu cuenta en un plazo de <strong>3 a 5 días hábiles</strong>.
+          </p>
+        </div>
+      )}
+
+      {/* Mensaje si está completado */}
+      {order.estado === "completado" && (
+        <div
+          className={`mt-4 p-4 rounded-lg border-l-4 ${
+            theme === "dark"
+              ? "bg-green-900 border-green-500 text-green-200"
+              : "bg-green-100 border-green-500 text-green-700"
+          }`}
+        >
+          <h3 className="font-semibold">Pedido completado</h3>
+          <p className="text-sm mt-1">
+            El servicio ha sido finalizado correctamente. El pago ya ha sido liberado al vendedor.
+          </p>
+        </div>
+      )}
+
+      {/* Contenedor de seguridad / advertencias */}
+      <div
+        className={`mt-6 p-4 rounded-lg border-l-4 ${
+          theme === "dark"
+            ? "bg-[#2a2a2a] border-orange-500 text-gray-200"
+            : "bg-orange-50 border-orange-500 text-gray-800"
+        }`}
+      >
+        <h3 className="font-semibold mb-2">Pago protegido</h3>
+        <ul className="list-disc pl-5 space-y-1 text-sm">
+          <li>Si el vendedor cancela la transacción, tu pago será reembolsado automáticamente.</li>
+          <li>Si el vendedor no responde en un tiempo razonable, tu dinero será regresado.</li>
+          <li>Para más información o soporte, contacta a <strong>soporte@mrchambasmx.com</strong>.</li>
+        </ul>
+      </div>
     </section>
   );
 }
