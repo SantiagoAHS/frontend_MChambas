@@ -7,25 +7,9 @@ import ServicesGrid from "@/components/services/Servicesgrid";
 import { useTheme } from "@/context/ThemeContext";
 
 export default function ServicesCatalog() {
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const { theme } = useTheme();
-
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/api/services/");
-        const data = await response.json();
-        setServices(data);
-      } catch (error) {
-        console.error("Error al obtener los servicios:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchServices();
-  }, []);
 
   const borderColor = theme === "dark" ? "border-purple-500" : "border-green-500";
   const bgColor = theme === "dark" ? "bg-[#3a3a3a]" : "bg-white";
@@ -33,6 +17,58 @@ export default function ServicesCatalog() {
   const buttonBg = theme === "dark" ? "bg-purple-600 hover:bg-purple-700" : "bg-green-500 hover:bg-green-700";
   const gradientBg = theme === "dark" ? "from-purple-600 to-orange-600" : "from-orange-500 to-purple-600";
   const paginationBtnBg = theme === "dark" ? "bg-purple-600" : "bg-green-600";
+
+  // 🔹 Función para obtener servicios (con o sin filtros)
+  const fetchServices = async (filters: Record<string, any> = {}) => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+
+      const query = new URLSearchParams();
+      if (filters.location) query.append("location", filters.location);
+      if (filters.verified) query.append("verified", "true");
+      if (filters.priceRange) query.append("price", filters.priceRange);
+      if (filters.min_rating) query.append("rating", String(filters.min_rating));
+
+      const url = Object.keys(filters).length
+        ? `http://localhost:8000/api/services/filtered/?${query.toString()}`
+        : "http://localhost:8000/api/services/";
+
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Token ${token}`;
+
+      const response = await fetch(url, { headers });
+
+      if (!response.ok) {
+        console.error("Error al obtener servicios:", response.status);
+        setServices([]);
+        return;
+      }
+
+      const data = await response.json();
+      setServices(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Error al obtener los servicios:", error);
+      setServices([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 🔹 Obtener servicios iniciales
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  // 🔹 Función que pasamos al sidebar para actualizar filtros
+  const handleFilterChange = (filters: Record<string, any>) => {
+    fetchServices(filters);
+  };
+
+  // 🔹 Obtener ubicaciones únicas para el sidebar
+  const locations = Array.isArray(services)
+    ? [...new Set(services.map((s) => s.location).filter(Boolean))]
+    : [];
 
   return (
     <div className={`${theme === "dark" ? "bg-[#3a3a3a]" : "bg-white"} min-h-screen`}>
@@ -57,7 +93,7 @@ export default function ServicesCatalog() {
       <main className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
           {/* Sidebar Filters */}
-          <SidebarFilters />
+          <SidebarFilters onFilterChange={handleFilterChange} locations={locations} />
 
           {/* Main Section */}
           <section className="flex-1">
@@ -101,9 +137,7 @@ export default function ServicesCatalog() {
               {["Anterior", "1", "2", "3", "Siguiente"].map((label, i) => (
                 <button
                   key={i}
-                  className={`px-4 py-2 rounded ${
-                    label === "1" ? `${paginationBtnBg} text-white` : `border ${borderColor}`
-                  }`}
+                  className={`px-4 py-2 rounded ${label === "1" ? `${paginationBtnBg} text-white` : `border ${borderColor}`}`}
                   disabled
                 >
                   {label}

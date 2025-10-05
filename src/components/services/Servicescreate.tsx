@@ -127,132 +127,146 @@ export default function ServicesCreate() {
   `;
 
   return (
-    <div className={`${isLight ? "bg-white" : "bg-[#3a3a3a]"} max-w-xl mx-auto p-6 rounded shadow`}>
-      <h2 className={`text-2xl mb-4 font-bold ${isLight ? "text-green-800" : "text-purple-300"}`}>
-        Crear Nuevo Servicio
-      </h2>
+  <div
+    className={`${
+      isLight ? "bg-white" : "bg-[#3a3a3a]"
+    } max-w-xl mx-auto p-6 rounded shadow`}
+  >
+    <h2
+      className={`text-2xl mb-4 font-bold ${
+        isLight ? "text-green-800" : "text-purple-300"
+      }`}
+    >
+      Crear Nuevo Servicio
+    </h2>
 
-      {error && <p className="text-red-600 mb-4">{error}</p>}
-      {success && <p className="text-green-600 mb-4">Servicio creado con éxito</p>}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          name="title"
-          type="text"
-          placeholder="Título"
-          value={formData.title}
-          onChange={handleChange}
-          required
-          className={inputClass}
-        />
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          className={inputClass}
-        />
-
-        <label className="flex items-center gap-2">
-          <input
-            name="verified"
-            type="checkbox"
-            checked={formData.verified}
-            onChange={handleChange}
-            className={checkboxClass}
-          />
-          <span className={isLight ? "text-black" : "text-white"}>Verificado</span>
-        </label>
-
-        <textarea
-          name="description"
-          placeholder="Descripción"
-          value={formData.description}
-          onChange={handleChange}
-          required
-          className={inputClass}
-        />
-
-        <input
-          name="street"
-          type="text"
-          placeholder="Calle y número"
-          value={formData.street}
-          onChange={handleChange}
-          required
-          className={inputClass}
-        />
-
-        <input
-          name="city"
-          type="text"
-          placeholder="Ciudad"
-          value={formData.city}
-          onChange={handleChange}
-          required
-          className={inputClass}
-        />
-
-        <input
-          name="state"
-          type="text"
-          placeholder="Estado"
-          value={formData.state}
-          onChange={handleChange}
-          className={inputClass}
-        />
-
-        <input
-          name="country"
-          type="text"
-          placeholder="País"
-          value={formData.country}
-          onChange={handleChange}
-          required
-          className={inputClass}
-        />
-
-        <input
-          name="postalcode"
-          type="text"
-          placeholder="Código Postal"
-          value={formData.postalcode}
-          onChange={handleChange}
-          className={inputClass}
-        />
-
-        <input
-          name="response_time"
-          type="text"
-          placeholder="Tiempo de respuesta"
-          value={formData.response_time}
-          onChange={handleChange}
-          required
-          className={inputClass}
-        />
-
-        <input
-          name="price"
-          type="text"
-          placeholder="Precio"
-          value={formData.price}
-          onChange={handleChange}
-          required
-          className={inputClass}
-        />
-
-        <button
-  type="submit"
-  disabled={loading}
-  className={`w-full py-2 rounded font-semibold transition
-    ${isLight
-      ? "bg-green-600 text-white border border-green-600 hover:bg-white hover:text-green-600 disabled:opacity-50"
-      : "bg-purple-600 text-white border border-purple-600 hover:bg-[#3a3a3a] hover:text-purple-600 disabled:opacity-50"
-    }`}
->
-  {loading ? "Guardando..." : "Crear Servicio"}
-</button>
-      </form>
+    {/* Recordatorio fuera del formulario */}
+    <div className="mb-4 p-4 border-l-4 border-yellow-400 bg-yellow-100 text-yellow-800 rounded">
+      ⚠️ Asegúrate de que tu cuenta esté verificada antes de crear un servicio.
     </div>
-  );
+
+    {error && <p className="text-red-600 mb-4">{error}</p>}
+    {success && <p className="text-green-600 mb-4">Servicio creado con éxito</p>}
+
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <input
+        name="title"
+        type="text"
+        placeholder="Título"
+        value={formData.title}
+        onChange={handleChange}
+        required
+        className={inputClass}
+      />
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        className={inputClass}
+      />
+
+      <label className="flex items-center gap-2">
+        <input
+          name="verified"
+          type="checkbox"
+          checked={formData.verified}
+          onChange={handleChange}
+          className={checkboxClass}
+        />
+        <span className={isLight ? "text-black" : "text-white"}>Verificado</span>
+      </label>
+
+      <textarea
+        name="description"
+        placeholder="Descripción"
+        value={formData.description}
+        onChange={handleChange}
+        required
+        className={inputClass}
+      />
+
+      <input
+        name="street"
+        type="text"
+        placeholder="Calle y número"
+        value={formData.street}
+        onChange={handleChange}
+        required
+        className={inputClass}
+      />
+
+      <input
+        name="city"
+        type="text"
+        placeholder="Ciudad"
+        value={formData.city}
+        onChange={handleChange}
+        required
+        className={inputClass}
+      />
+
+      <input
+        name="state"
+        type="text"
+        placeholder="Estado"
+        value={formData.state}
+        onChange={handleChange}
+        className={inputClass}
+      />
+
+      <input
+        name="country"
+        type="text"
+        placeholder="País"
+        value={formData.country}
+        onChange={handleChange}
+        required
+        className={inputClass}
+      />
+
+      <input
+        name="postalcode"
+        type="text"
+        placeholder="Código Postal"
+        value={formData.postalcode}
+        onChange={handleChange}
+        className={inputClass}
+      />
+
+      <input
+        name="response_time"
+        type="text"
+        placeholder="Tiempo de respuesta"
+        value={formData.response_time}
+        onChange={handleChange}
+        required
+        className={inputClass}
+      />
+
+      <input
+        name="price"
+        type="text"
+        placeholder="Precio"
+        value={formData.price}
+        onChange={handleChange}
+        required
+        className={inputClass}
+      />
+
+      <button
+        type="submit"
+        disabled={loading} 
+        className={`w-full py-2 rounded font-semibold transition
+          ${
+            isLight
+              ? "bg-green-600 text-white border border-green-600 hover:bg-white hover:text-green-600 disabled:opacity-50"
+              : "bg-purple-600 text-white border border-purple-600 hover:bg-[#3a3a3a] hover:text-purple-600 disabled:opacity-50"
+          }`}
+      >
+        {loading ? "Guardando..." : "Crear Servicio"}
+      </button>
+    </form>
+  </div>
+);
 }

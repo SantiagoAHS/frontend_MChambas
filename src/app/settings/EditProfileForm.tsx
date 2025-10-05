@@ -8,6 +8,9 @@ interface Props {
     nombre: string;
     telefono: string;
     avatar: string | null;
+    curp?: string;
+    id_document?: string;
+    is_verified?: boolean;
   };
   onUpdate: () => void;
 }
@@ -19,6 +22,8 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
   const [nombre, setNombre] = useState(profile.nombre);
   const [telefono, setTelefono] = useState(profile.telefono);
   const [avatar, setAvatar] = useState<File | null>(null);
+  const [curp, setCurp] = useState(profile.curp || "");
+  const [idDocument, setIdDocument] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,14 +34,14 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
     const formData = new FormData();
     formData.append("nombre", nombre);
     formData.append("telefono", telefono);
+    if (curp) formData.append("curp", curp);
     if (avatar) formData.append("avatar", avatar);
+    if (idDocument) formData.append("identificacion", idDocument);
 
     try {
-      const res = await fetch("http://localhost:8000/api/user/profile/", {
+      const res = await fetch("http://localhost:8000/api/user/profile/update/", {
         method: "PUT",
-        headers: {
-          Authorization: `Token ${token}`,
-        },
+        headers: { Authorization: `Token ${token}` },
         body: formData,
       });
 
@@ -67,6 +72,7 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
         Editar Perfil
       </h3>
 
+      {/* Nombre */}
       <div>
         <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
           Nombre
@@ -83,6 +89,7 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
         />
       </div>
 
+      {/* Teléfono */}
       <div>
         <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
           Teléfono
@@ -99,6 +106,24 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
         />
       </div>
 
+      {/* CURP */}
+      <div>
+        <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
+          CURP
+        </label>
+        <input
+          type="text"
+          value={curp}
+          onChange={(e) => setCurp(e.target.value)}
+          className={`w-full rounded px-3 py-2 border transition focus:outline-none 
+            ${isLight 
+              ? "border-gray-300 text-gray-800 focus:ring-2 focus:ring-green-500 bg-white" 
+              : "border-gray-600 text-gray-100 focus:ring-2 focus:ring-purple-500 bg-[#3a3a3a]"
+            }`}
+        />
+      </div>
+
+      {/* Avatar */}
       <div>
         <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
           Avatar
@@ -111,6 +136,33 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
         />
       </div>
 
+      {/* Documento de identidad */}
+      <div>
+        <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
+          Documento de identidad (INE / Pasaporte)
+        </label>
+        <input
+          type="file"
+          accept="image/*,.pdf"
+          onChange={(e) => setIdDocument(e.target.files?.[0] || null)}
+          className={`w-full ${isLight ? "text-gray-800" : "text-gray-200"}`}
+        />
+      </div>
+
+      {/* Estado de verificación */}
+      {profile.is_verified !== undefined && (
+        <p
+          className={`text-sm font-semibold ${
+            profile.is_verified
+              ? "text-green-600"
+              : "text-yellow-600"
+          }`}
+        >
+          {profile.is_verified ? "✅ Cuenta verificada" : "⏳ En revisión"}
+        </p>
+      )}
+
+      {/* Botón */}
       <button
         type="submit"
         disabled={loading}
