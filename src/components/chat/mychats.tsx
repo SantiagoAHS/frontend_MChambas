@@ -31,23 +31,33 @@ export default function MyChats() {
 
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-  useEffect(() => {
-    async function fetchChats() {
-      if (!token) return;
-      try {
-        const res = await fetch("http://localhost:8000/api/chats/", {
-          headers: { Authorization: `Token ${token}` },
-        });
-        const data = await res.json();
+  // 🔹 Función para obtener chats
+  const fetchChats = async () => {
+    if (!token) return;
+    try {
+      const res = await fetch("http://localhost:8000/api/chats/", {
+        headers: { Authorization: `Token ${token}` },
+      });
+      const data = await res.json();
+      setChats(data.chats || data);
+      setUserId(data.user_id || parseInt(localStorage.getItem("user_id") || "0"));
 
-        setChats(data.chats || data);
-        setUserId(data.user_id || parseInt(localStorage.getItem("user_id") || "0"));
-      } catch (err) {
-        console.error("Error al obtener chats", err);
+      // 🔹 Actualizar activeChat si está abierto
+      if (activeChat) {
+        const updated = (data.chats || data).find((c: Chat) => c.id === activeChat.id);
+        if (updated) setActiveChat(updated);
       }
+    } catch (err) {
+      console.error("Error al obtener chats", err);
     }
-    fetchChats();
-  }, [token]);
+  };
+
+  // 🔹 Auto-refresh con interval
+  useEffect(() => {
+    fetchChats(); // fetch inicial
+    const interval = setInterval(fetchChats, 5000); // cada 5s
+    return () => clearInterval(interval);
+  }, [token, activeChat]);
 
   const handleSend = async () => {
     if (!newMessage.trim() || !activeChat || !token) return;
@@ -83,6 +93,22 @@ export default function MyChats() {
     return other ? other.nombre : "Tú";
   };
 
+  // 🔹 Función para saber si hay mensajes pendientes de respuesta
+  const hasPendingResponse = (chat: Chat) => {
+    if (!userId) return false;
+
+    const lastFromOther = [...chat.messages].reverse().find(msg => msg.sender.id !== userId);
+    if (!lastFromOther) return false; // No hay mensajes del otro usuario
+
+    const lastFromUser = [...chat.messages].reverse().find(msg => msg.sender.id === userId);
+
+    if (lastFromUser && new Date(lastFromUser.timestamp) > new Date(lastFromOther.timestamp)) {
+      return false; // Ya respondiste
+    }
+
+    return true; // Pendiente de respuesta
+  };
+
   return (
     <div className={`flex h-screen ${theme === "dark" ? "bg-[#3a3a3a] text-white" : "bg-gray-100 text-black"}`}>
       <aside className={`w-1/4 p-4 ${theme === "dark" ? "bg-[#3a3a3a] border-r border-gray-700" : "bg-white border-r"}`}>
@@ -91,7 +117,7 @@ export default function MyChats() {
           chats.map((chat) => (
             <div
               key={chat.id}
-              className={`p-3 rounded cursor-pointer mb-2 ${
+              className={`p-3 rounded cursor-pointer mb-2 flex justify-between items-center ${
                 activeChat?.id === chat.id
                   ? theme === "dark"
                     ? "bg-purple-500 text-white"
@@ -102,10 +128,13 @@ export default function MyChats() {
               }`}
               onClick={() => setActiveChat(chat)}
             >
-              <p className="font-semibold">{getOtherParticipantName(chat)}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
-                {chat.messages.at(-1)?.content || "Sin mensajes"}
-              </p>
+              <div>
+                <p className="font-semibold">{getOtherParticipantName(chat)}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
+                  {chat.messages.at(-1)?.content || "Sin mensajes"}
+                </p>
+              </div>
+              {hasPendingResponse(chat) && <span className="w-3 h-3 bg-red-500 rounded-full ml-2"></span>}
             </div>
           ))}
       </aside>

@@ -166,6 +166,7 @@ export default function ServicesCreate() {
         className={inputClass}
       />
 
+      {/* 
       <label className="flex items-center gap-2">
         <input
           name="verified"
@@ -175,7 +176,8 @@ export default function ServicesCreate() {
           className={checkboxClass}
         />
         <span className={isLight ? "text-black" : "text-white"}>Verificado</span>
-      </label>
+      </label> 
+      */}
 
       <textarea
         name="description"

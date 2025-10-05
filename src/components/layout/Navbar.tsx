@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const menuRef = useRef<HTMLUListElement | null>(null); // Nuevo ref para hamburguesa
+  const menuRef = useRef<HTMLUListElement | null>(null); 
 
 
   const { theme, toggleTheme } = useTheme();

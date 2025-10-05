@@ -9,7 +9,6 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 const links = [
   { href: "/user", label: "Inicio" },
   { href: "/mycontracts", label: "Mis Trabajos" },
-  { href: "/pagos", label: "Mis Pagos" },
   { href: "/services/create", label: "Nuevo Servicio" },
   { href: "/chat", label: "Mis Chats" },
   { href: "/settings", label: "Ajustes" },
