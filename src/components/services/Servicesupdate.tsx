@@ -147,10 +147,10 @@ export default function ServicesUpdate({ serviceId }: Props) {
 
         <input type="file" accept="image/*" onChange={handleFileChange} className="w-full border px-3 py-2 rounded" />
 
-        <label className="flex items-center gap-2">
+        {/* <label className="flex items-center gap-2">
           <input name="verified" type="checkbox" checked={formData.verified} onChange={handleChange} />
           Verificado
-        </label>
+        </label> */}
 
         <textarea
           name="description"
