@@ -26,7 +26,7 @@ export default function UserServices() {
     async function fetchUserServices() {
       try {
         const token = localStorage.getItem("token"); // obtener token del almacenamiento
-        const res = await fetch("http://localhost:8000/api/services/my-services/", {
+        const res = await fetch("https://mibackend-mchambas.onrender.com/api/services/my-services/", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Token ${token}`, // enviar token

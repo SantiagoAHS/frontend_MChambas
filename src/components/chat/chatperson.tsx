@@ -27,7 +27,7 @@ const ChatPerson: React.FC<ChatPersonProps> = ({ chatId, reloadTrigger }) => {
     if (!token) return;
     async function fetchMessages() {
       try {
-        const res = await fetch(`http://localhost:8000/api/chats/${chatId}/`, {
+        const res = await fetch(`https://mibackend-mchambas.onrender.com/api/chats/${chatId}/`, {
           headers: { Authorization: `Token ${token}` },
         });
         if (!res.ok) throw new Error("Error al cargar mensajes");

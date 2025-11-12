@@ -19,7 +19,7 @@ export default function RegisterPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/api/user/register/", {
+      const response = await fetch("https://mibackend-mchambas.onrender.com/api/user/register/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

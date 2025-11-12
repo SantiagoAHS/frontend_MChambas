@@ -39,7 +39,7 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
     if (idDocument) formData.append("identificacion", idDocument);
 
     try {
-      const res = await fetch("http://localhost:8000/api/user/profile/update/", {
+      const res = await fetch("https://mibackend-mchambas.onrender.com/api/user/profile/update/", {
         method: "PUT",
         headers: { Authorization: `Token ${token}` },
         body: formData,

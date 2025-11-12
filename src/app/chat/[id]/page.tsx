@@ -18,7 +18,7 @@ export default function ChatPage({ params }: Props) {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/api/chats/${params.id}/send/`,
+        `https://mibackend-mchambas.onrender.com/api/chats/${params.id}/send/`,
         {
           method: "POST",
           headers: {

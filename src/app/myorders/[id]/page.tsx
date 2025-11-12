@@ -17,7 +17,7 @@ export default function MyOrderDetailPage() {
       return;
     }
 
-    fetch(`http://localhost:8000/api/ventas/${id}/`, {
+    fetch(`https://mibackend-mchambas.onrender.com/api/ventas/${id}/`, {
       headers: { Authorization: `Token ${token}` },
     })
       .then(async (res) => {

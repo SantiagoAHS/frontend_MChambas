@@ -26,7 +26,7 @@ export default function ServiciosPage() {
   useEffect(() => {
     if (!token) return;
 
-    fetch("http://localhost:8000/api/services/verify/services/", {
+    fetch("https://mibackend-mchambas.onrender.com/api/services/verify/services/", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Token ${token}`,
@@ -44,7 +44,7 @@ export default function ServiciosPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/api/services/verify/services/${id}/`,
+        `https://mibackend-mchambas.onrender.com/api/services/verify/services/${id}/`,
         {
           method: "PATCH",
           headers: {

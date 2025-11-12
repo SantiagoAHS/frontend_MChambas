@@ -14,7 +14,7 @@ export default function ServiceDetailPage() {
 
   useEffect(() => {
     async function fetchService() {
-      const res = await fetch(`http://localhost:8000/api/services/${id}/`, {
+      const res = await fetch(`https://mibackend-mchambas.onrender.com/api/services/${id}/`, {
         cache: "no-store",
       });
 
@@ -38,7 +38,7 @@ export default function ServiceDetailPage() {
     }
 
     try {
-      const res = await fetch("http://localhost:8000/api/chats/create/", {
+      const res = await fetch("https://mibackend-mchambas.onrender.com/api/chats/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export default function ServiceDetailPage() {
 
       const chat = await res.json();
 
-      await fetch(`http://localhost:8000/api/chats/${chat.id}/send/`, {
+      await fetch(`https://mibackend-mchambas.onrender.com/api/chats/${chat.id}/send/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -96,7 +96,7 @@ export default function ServiceDetailPage() {
 
         {service.image && (
           <img
-            src={`http://localhost:8000${service.image}`}
+            src={`https://mibackend-mchambas.onrender.com${service.image}`}
             alt={service.title}
             className="w-full h-64 object-cover rounded mb-4 border border-gray-400"
           />

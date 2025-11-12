@@ -40,7 +40,7 @@ export default function ServicesUpdate({ serviceId }: Props) {
       }
 
       try {
-        const res = await fetch(`http://localhost:8000/api/services/${serviceId}/`, {
+        const res = await fetch(`https://mibackend-mchambas.onrender.com/api/services/${serviceId}/`, {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -106,7 +106,7 @@ export default function ServicesUpdate({ serviceId }: Props) {
     data.append("price", formData.price);
 
     try {
-      const res = await fetch(`http://localhost:8000/api/services/update/${serviceId}/`, {
+      const res = await fetch(`https://mibackend-mchambas.onrender.com/api/services/update/${serviceId}/`, {
         method: "PUT",
         headers: {
             Authorization: `Token ${token}`,

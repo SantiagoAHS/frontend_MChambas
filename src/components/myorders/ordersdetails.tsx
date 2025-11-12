@@ -29,7 +29,7 @@ const OrdersDetails: React.FC = () => {
       return;
     }
 
-    fetch("http://localhost:8000/api/ventas/mis-pedidos/", {
+    fetch("https://mibackend-mchambas.onrender.com/api/ventas/mis-pedidos/", {
       headers: { Authorization: `Token ${token}` },
     })
       .then(async (res) => {

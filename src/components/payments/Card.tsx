@@ -31,7 +31,7 @@ const TarjetasForm: React.FC<{ onSaved: (t: Tarjeta) => void }> = ({ onSaved }) 
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:8000/api/pagos/tarjetas/', {
+      const res = await fetch('https://mibackend-mchambas.onrender.com/api/pagos/tarjetas/', {
         headers: { Authorization: `Token ${token}` },
       });
       const data = await res.json();
@@ -57,7 +57,7 @@ const TarjetasForm: React.FC<{ onSaved: (t: Tarjeta) => void }> = ({ onSaved }) 
       const token = localStorage.getItem('token');
 
       // 1. Crear SetupIntent
-      const intentRes = await fetch('http://localhost:8000/api/pagos/stripe/setup-intent/', {
+      const intentRes = await fetch('https://mibackend-mchambas.onrender.com/api/pagos/stripe/setup-intent/', {
         method: 'POST',
         headers: { Authorization: `Token ${token}` },
       });
@@ -73,7 +73,7 @@ const TarjetasForm: React.FC<{ onSaved: (t: Tarjeta) => void }> = ({ onSaved }) 
       const setupIntent = result.setupIntent;
 
       // 3. Guardar en backend
-      const saveRes = await fetch('http://localhost:8000/api/pagos/stripe/attach-payment-method/', {
+      const saveRes = await fetch('https://mibackend-mchambas.onrender.com/api/pagos/stripe/attach-payment-method/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Token ${token}` },
         body: JSON.stringify({ payment_method_id: setupIntent.payment_method }),
@@ -97,7 +97,7 @@ const TarjetasForm: React.FC<{ onSaved: (t: Tarjeta) => void }> = ({ onSaved }) 
   const handleEliminar = async (id: number) => {
     const token = localStorage.getItem('token');
     try {
-      await fetch(`http://localhost:8000/api/pagos/tarjetas/${id}/`, {
+      await fetch(`https://mibackend-mchambas.onrender.com/api/pagos/tarjetas/${id}/`, {
         method: 'DELETE',
         headers: { Authorization: `Token ${token}` }
       });
@@ -113,7 +113,7 @@ const TarjetasForm: React.FC<{ onSaved: (t: Tarjeta) => void }> = ({ onSaved }) 
     setMessage(''); // limpiar mensajes previos
     try {
       // 1. Llamar al backend para marcar la tarjeta por defecto
-      const res = await fetch(`http://localhost:8000/api/pagos/tarjetas/${id}/set-default/`, {
+      const res = await fetch(`https://mibackend-mchambas.onrender.com/api/pagos/tarjetas/${id}/set-default/`, {
         method: 'POST',
         headers: { Authorization: `Token ${token}` }
       });

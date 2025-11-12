@@ -21,7 +21,7 @@ const ServiceCard = ({ service }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:8000/api/chats/create/", {
+      const res = await fetch("https://mibackend-mchambas.onrender.com/api/chats/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,7 +34,7 @@ const ServiceCard = ({ service }) => {
 
       const chat = await res.json();
 
-      await fetch(`http://localhost:8000/api/chats/${chat.id}/send/`, {
+      await fetch(`https://mibackend-mchambas.onrender.com/api/chats/${chat.id}/send/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -28,7 +28,7 @@ const ContractsDetail: React.FC = () => {
       return;
     }
 
-    fetch("http://localhost:8000/api/ventas/mis-ventas/", {
+    fetch("https://mibackend-mchambas.onrender.com/api/ventas/mis-ventas/", {
       headers: { Authorization: `Token ${token}` },
     })
       .then(async (res) => {

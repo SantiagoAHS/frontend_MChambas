@@ -31,8 +31,8 @@ export default function ServicesCatalog() {
       if (filters.min_rating) query.append("rating", String(filters.min_rating));
 
       const url = Object.keys(filters).length
-        ? `http://localhost:8000/api/services/filtered/?${query.toString()}`
-        : "http://localhost:8000/api/services/";
+        ? `https://mibackend-mchambas.onrender.com/api/services/filtered/?${query.toString()}`
+        : "https://mibackend-mchambas.onrender.com/api/services/";
 
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Token ${token}`;

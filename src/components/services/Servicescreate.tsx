@@ -75,7 +75,7 @@ export default function ServicesCreate() {
     data.append("price", formData.price);
 
     try {
-      const res = await fetch("http://localhost:8000/api/services/create/", {
+      const res = await fetch("https://mibackend-mchambas.onrender.com/api/services/create/", {
         method: "POST",
         headers: {
           Authorization: `Token ${token}`,

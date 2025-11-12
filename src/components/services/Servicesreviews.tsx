@@ -30,7 +30,7 @@ const ServicesReviews: React.FC<Props> = ({ serviceId }) => {
       setError(null);
       try {
         const res = await fetch(
-          `http://localhost:8000/api/services/${serviceId}/reviews/`
+          `https://mibackend-mchambas.onrender.com/api/services/${serviceId}/reviews/`
         );
         if (!res.ok) throw new Error("Error al cargar los comentarios");
         const data = await res.json();
@@ -56,7 +56,7 @@ const ServicesReviews: React.FC<Props> = ({ serviceId }) => {
     setError(null);
     try {
       const res = await fetch(
-        `http://localhost:8000/api/services/${serviceId}/reviews/create/`,
+        `https://mibackend-mchambas.onrender.com/api/services/${serviceId}/reviews/create/`,
         {
           method: "POST",
           headers: {

@@ -35,7 +35,7 @@ export default function MyChats() {
   const fetchChats = async () => {
     if (!token) return;
     try {
-      const res = await fetch("http://localhost:8000/api/chats/", {
+      const res = await fetch("https://mibackend-mchambas.onrender.com/api/chats/", {
         headers: { Authorization: `Token ${token}` },
       });
       const data = await res.json();
@@ -63,7 +63,7 @@ export default function MyChats() {
     if (!newMessage.trim() || !activeChat || !token) return;
 
     try {
-      const res = await fetch(`http://localhost:8000/api/chats/${activeChat.id}/send/`, {
+      const res = await fetch(`https://mibackend-mchambas.onrender.com/api/chats/${activeChat.id}/send/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

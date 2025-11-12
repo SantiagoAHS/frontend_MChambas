@@ -29,7 +29,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
       }
 
       try {
-        const res = await fetch("http://localhost:8000/api/user/profile/", {
+        const res = await fetch("https://mibackend-mchambas.onrender.com/api/user/profile/", {
           headers: {
             Authorization: `Token ${token}`,
           },

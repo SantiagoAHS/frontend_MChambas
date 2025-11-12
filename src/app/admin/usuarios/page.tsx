@@ -20,7 +20,7 @@ export default function UsuariosPage() {
 
     if (!token) return;
 
-    fetch("http://localhost:8000/api/user/verify/users/", {
+    fetch("https://mibackend-mchambas.onrender.com/api/user/verify/users/", {
         headers: {
         "Content-Type": "application/json",
         Authorization: `Token ${token}`,
@@ -43,7 +43,7 @@ export default function UsuariosPage() {
     }
 
     try {
-        const res = await fetch(`http://localhost:8000/api/user/verify/users/${id}/`, {
+        const res = await fetch(`https://mibackend-mchambas.onrender.com/api/user/verify/users/${id}/`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",

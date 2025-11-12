@@ -19,7 +19,7 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:8000/api/user/login/", {
+      const res = await fetch("https://mibackend-mchambas.onrender.com/api/user/login/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

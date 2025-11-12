@@ -16,7 +16,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     async function fetchService() {
-      const res = await fetch(`http://localhost:8000/api/services/${id}/`);
+      const res = await fetch(`https://mibackend-mchambas.onrender.com/api/services/${id}/`);
       if (res.ok) {
         const data = await res.json();
         setService(data);
@@ -27,7 +27,7 @@ export default function CheckoutPage() {
       const token = localStorage.getItem("token");
       if (!token) return setUserName("Invitado");
 
-      const res = await fetch("http://localhost:8000/api/user/profile/", {
+      const res = await fetch("https://mibackend-mchambas.onrender.com/api/user/profile/", {
         headers: { Authorization: `Token ${token}` },
       });
       if (res.ok) {
@@ -43,7 +43,7 @@ export default function CheckoutPage() {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:8000/api/pagos/tarjetas/", {
+        const res = await fetch("https://mibackend-mchambas.onrender.com/api/pagos/tarjetas/", {
           headers: { Authorization: `Token ${token}` },
         });
         if (!res.ok) return;
@@ -78,7 +78,7 @@ export default function CheckoutPage() {
       phone: data.phone,
     };
 
-    fetch("http://localhost:8000/api/ventas/", {
+    fetch("https://mibackend-mchambas.onrender.com/api/ventas/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -149,7 +149,7 @@ export default function CheckoutPage() {
             </p>
             {service.image && (
               <img
-                src={`http://localhost:8000${service.image}`}
+                src={`https://mibackend-mchambas.onrender.com${service.image}`}
                 alt={service.title}
                 className="mt-4 w-full h-48 object-cover rounded"
               />

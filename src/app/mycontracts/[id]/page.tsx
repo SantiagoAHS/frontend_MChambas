@@ -44,7 +44,7 @@ export default function ContractDetailPage() {
       return;
     }
 
-    fetch(`http://localhost:8000/api/ventas/mis-ventas/${id}/`, {
+    fetch(`https://mibackend-mchambas.onrender.com/api/ventas/mis-ventas/${id}/`, {
       headers: {
         Authorization: `Token ${token}`,
       },
@@ -72,7 +72,7 @@ export default function ContractDetailPage() {
     }
 
     const response = await fetch(
-      `http://localhost:8000/api/ventas/mis-ventas/${contract.id}/`,
+      `https://mibackend-mchambas.onrender.com/api/ventas/mis-ventas/${contract.id}/`,
       {
         method: "PUT",
         headers: {
