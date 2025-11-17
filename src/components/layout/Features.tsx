@@ -12,10 +12,11 @@ interface Feature {
 const features: Feature[] = [
   {
     title: "Alta Calidad",
-    description: "Solo ofrecemos servicios de la mejor calidad para nuestros clientes.",
+    description:
+      "Solo ofrecemos servicios de la mejor calidad para nuestros clientes.",
     icon: (
       <svg
-        className="w-12 h-12 text-orange-600"
+        className="w-12 h-12 text-red-500"
         fill="none"
         stroke="currentColor"
         strokeWidth={2}
@@ -31,10 +32,11 @@ const features: Feature[] = [
   },
   {
     title: "Disponibilidad 24/7",
-    description: "Nuestro equipo está siempre disponible para ayudarte cuando nos necesites.",
+    description:
+      "Nuestro equipo está siempre disponible para ayudarte cuando nos necesites.",
     icon: (
       <svg
-        className="w-12 h-12 text-orange-600"
+        className="w-12 h-12 text-red-500"
         fill="none"
         stroke="currentColor"
         strokeWidth={2}
@@ -49,10 +51,11 @@ const features: Feature[] = [
   },
   {
     title: "Fácil de Usar",
-    description: "Interfaz intuitiva y diseño pensado en la mejor experiencia para el usuario.",
+    description:
+      "Interfaz intuitiva y diseño pensado en la mejor experiencia para el usuario.",
     icon: (
       <svg
-        className="w-12 h-12 text-orange-600"
+        className="w-12 h-12 text-red-500"
         fill="none"
         stroke="currentColor"
         strokeWidth={2}
@@ -79,9 +82,13 @@ const Features: React.FC = () => {
         {features.map((feature, index) => (
           <div
             key={index}
-            className={`feature-card p-6 rounded shadow hover:shadow-lg transition ${
-              isLight ? "bg-white text-gray-800" : "bg-[#2a2a2a] text-gray-100"
-            }`}
+            className={`feature-card p-6 rounded shadow hover:shadow-lg transition duration-300 border-t-4 border-red-500
+              ${
+                isLight
+                  ? "bg-white text-gray-800 hover:bg-red-50"
+                  : "bg-[#1e1e1e] text-gray-100 hover:bg-[#2a2a2a]"
+              }
+            `}
           >
             <div className="icon mb-4 mx-auto">{feature.icon}</div>
             <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>

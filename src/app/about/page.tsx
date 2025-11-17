@@ -10,7 +10,7 @@ export default function AboutPage() {
   const { theme } = useTheme();
   const isLight = theme === "light";
 
-  const accentColor = '#ff6600';
+  const accentColor = "text-red-500";
 
   const animateSection = (section: HTMLDivElement, index: number) => {
     const image = section.querySelector<HTMLElement>('.image');
@@ -80,7 +80,7 @@ export default function AboutPage() {
     if (el) sectionsRef.current[index] = el;
   };
 
-  const bgCard = isLight ? "#f3f4f6" : "#2d2d2d"; // gris claro / gris oscuro
+  const bgCard = isLight ? "#f3f4f6" : "#2d2d2d"; 
   const textMuted = isLight ? "#4b5563" : "#cccccc";
   const borderColor = isLight ? "#e5e7eb" : "#444";
 
@@ -137,7 +137,6 @@ export default function AboutPage() {
               </div>
             </div>
 
-
             {/* Texto */}
             <div
               className="text w-full md:w-1/2 flex flex-col justify-center"
@@ -148,9 +147,11 @@ export default function AboutPage() {
                 paddingRight: '1rem',
               }}
             >
-              <h2 className="text-3xl font-bold mb-4" style={{ color: accentColor }}>
+              {/* ÚNICO CAMBIO → siempre rojo */}
+              <h2 className={`text-3xl font-bold mb-4 ${accentColor}`}>
                 {title}
               </h2>
+
               <p style={{ color: textMuted }}>{content}</p>
             </div>
           </div>

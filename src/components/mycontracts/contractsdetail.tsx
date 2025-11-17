@@ -17,7 +17,7 @@ interface Contract {
 
 const ContractsDetail: React.FC = () => {
   const router = useRouter();
-  const { theme } = useTheme(); // modo actual
+  const { theme } = useTheme(); 
   const [contracts, setContracts] = useState<Contract[]>([]);
   const [loading, setLoading] = useState(true);
 

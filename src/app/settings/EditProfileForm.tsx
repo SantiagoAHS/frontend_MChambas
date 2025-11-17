@@ -39,11 +39,14 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
     if (idDocument) formData.append("identificacion", idDocument);
 
     try {
-      const res = await fetch("https://mibackend-mchambas.onrender.com/api/user/profile/update/", {
-        method: "PUT",
-        headers: { Authorization: `Token ${token}` },
-        body: formData,
-      });
+      const res = await fetch(
+        "https://mibackend-mchambas.onrender.com/api/user/profile/update/",
+        {
+          method: "PUT",
+          headers: { Authorization: `Token ${token}` },
+          body: formData,
+        }
+      );
 
       if (res.ok) {
         alert("Perfil actualizado");
@@ -63,71 +66,61 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
     <form
       onSubmit={handleSubmit}
       className={`p-6 rounded-xl shadow-lg space-y-4 max-w-xl mx-auto mt-10 border transition
-        ${isLight 
-          ? "bg-white border-green-600" 
-          : "bg-[#2e2e2e] border-purple-600"
+        ${
+          isLight
+            ? "bg-white border-red-500 text-gray-800"
+            : "bg-[#2e2e2e] border-red-500 text-gray-200"
         }`}
     >
-      <h3 className={`text-xl font-bold ${isLight ? "text-gray-800" : "text-gray-200"}`}>
-        Editar Perfil
-      </h3>
+      <h3 className="text-xl font-bold text-red-500">Editar Perfil</h3>
 
-      {/* Nombre */}
       <div>
-        <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
-          Nombre
-        </label>
+        <label className="block text-sm mb-1 text-red-500">Nombre</label>
         <input
           type="text"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          className={`w-full rounded px-3 py-2 border transition focus:outline-none 
-            ${isLight 
-              ? "border-gray-300 text-gray-800 focus:ring-2 focus:ring-green-500 bg-white" 
-              : "border-gray-600 text-gray-100 focus:ring-2 focus:ring-purple-500 bg-[#3a3a3a]"
+          className={`w-full rounded px-3 py-2 border transition focus:outline-none focus:border-red-500 focus:border-2
+            ${
+              isLight
+                ? "border-gray-300 text-gray-800 bg-white"
+                : "border-gray-600 text-gray-100 bg-[#3a3a3a]"
             }`}
         />
       </div>
 
-      {/* Teléfono */}
       <div>
-        <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
-          Teléfono
-        </label>
+        <label className="block text-sm mb-1 text-red-500">Teléfono</label>
         <input
           type="text"
           value={telefono}
           onChange={(e) => setTelefono(e.target.value)}
-          className={`w-full rounded px-3 py-2 border transition focus:outline-none 
-            ${isLight 
-              ? "border-gray-300 text-gray-800 focus:ring-2 focus:ring-green-500 bg-white" 
-              : "border-gray-600 text-gray-100 focus:ring-2 focus:ring-purple-500 bg-[#3a3a3a]"
+          className={`w-full rounded px-3 py-2 border transition focus:outline-none focus:border-red-500 focus:border-2
+            ${
+              isLight
+                ? "border-gray-300 text-gray-800 bg-white"
+                : "border-gray-600 text-gray-100 bg-[#3a3a3a]"
             }`}
         />
       </div>
 
-      {/* CURP */}
       <div>
-        <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
-          CURP
-        </label>
+        <label className="block text-sm mb-1 text-red-500">CURP</label>
         <input
           type="text"
           value={curp}
           onChange={(e) => setCurp(e.target.value)}
-          className={`w-full rounded px-3 py-2 border transition focus:outline-none 
-            ${isLight 
-              ? "border-gray-300 text-gray-800 focus:ring-2 focus:ring-green-500 bg-white" 
-              : "border-gray-600 text-gray-100 focus:ring-2 focus:ring-purple-500 bg-[#3a3a3a]"
+          className={`w-full rounded px-3 py-2 border transition focus:outline-none focus:border-red-500 focus:border-2
+            ${
+              isLight
+                ? "border-gray-300 text-gray-800 bg-white"
+                : "border-gray-600 text-gray-100 bg-[#3a3a3a]"
             }`}
         />
       </div>
 
-      {/* Avatar */}
       <div>
-        <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
-          Avatar
-        </label>
+        <label className="block text-sm mb-1 text-red-500">Avatar</label>
         <input
           type="file"
           accept="image/*"
@@ -136,11 +129,8 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
         />
       </div>
 
-      {/* Documento de identidad */}
       <div>
-        <label className={`block text-sm mb-1 ${isLight ? "text-gray-700" : "text-gray-300"}`}>
-          Documento de identidad (INE / Pasaporte)
-        </label>
+        <label className="block text-sm mb-1 text-red-500">Documento de identidad</label>
         <input
           type="file"
           accept="image/*,.pdf"
@@ -149,27 +139,24 @@ export default function EditProfileForm({ profile, onUpdate }: Props) {
         />
       </div>
 
-      {/* Estado de verificación */}
       {profile.is_verified !== undefined && (
         <p
           className={`text-sm font-semibold ${
-            profile.is_verified
-              ? "text-green-600"
-              : "text-yellow-600"
+            profile.is_verified ? "text-green-500" : "text-yellow-400"
           }`}
         >
           {profile.is_verified ? "✅ Cuenta verificada" : "⏳ En revisión"}
         </p>
       )}
 
-      {/* Botón */}
       <button
         type="submit"
         disabled={loading}
         className={`w-full py-2 rounded font-semibold transition disabled:opacity-50
-          ${isLight 
-            ? "bg-green-600 text-white hover:bg-white hover:text-green-600 hover:border hover:border-green-600"
-            : "bg-purple-600 text-white hover:bg-white hover:text-purple-600 hover:border hover:border-purple-600"
+          ${
+            isLight
+              ? "bg-red-500 text-white hover:bg-white hover:text-red-500 hover:border hover:border-red-500"
+              : "bg-red-600 text-white hover:bg-white hover:text-red-600 hover:border hover:border-red-500"
           }`}
       >
         {loading ? "Guardando..." : "Guardar cambios"}

@@ -40,9 +40,8 @@ export default function Contact() {
       }}
     >
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* Formulario */}
         <div>
-          <h1 className="text-3xl font-bold mb-4">Envíanos un mensaje</h1>
+          <h1 className="text-3xl font-bold mb-4 text-red-500">Envíanos un mensaje</h1>
           <p className="mb-8">
             Llena el siguiente formulario y nos pondremos en contacto contigo lo antes posible.
           </p>
@@ -50,31 +49,32 @@ export default function Contact() {
           <form className="space-y-6">
             {['Nombre', 'Correo electrónico'].map((label, i) => (
               <div key={i}>
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-sm font-medium mb-1 text-red-500">
                   {label}
                 </label>
                 <input
                   type={label === 'Correo electrónico' ? 'email' : 'text'}
-                  className="w-full rounded-md p-2 border transition focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full rounded-md p-2 border transition focus:outline-none focus:ring-2"
                   style={{
                     backgroundColor: isLight ? "#ffffff" : "#1f1f1f",
-                    borderColor: isLight ? "#d1d5db" : "#4b5563",
+                    borderColor: "#ef4444", // rojo
                     color: isLight ? "#111" : "#fff",
+                    boxShadow: "0 0 0 0 transparent",
                   }}
                 />
               </div>
             ))}
 
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-medium mb-1 text-red-500">
                 Mensaje
               </label>
               <textarea
                 rows={4}
-                className="w-full rounded-md p-2 border transition focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full rounded-md p-2 border transition focus:outline-none focus:ring-2"
                 style={{
                   backgroundColor: isLight ? "#ffffff" : "#1f1f1f",
-                  borderColor: isLight ? "#d1d5db" : "#4b5563",
+                  borderColor: "#ef4444",
                   color: isLight ? "#111" : "#fff",
                 }}
               ></textarea>
@@ -84,19 +84,19 @@ export default function Contact() {
               type="submit"
               className="font-bold py-2 px-6 rounded-md border-2 transition-colors duration-300"
               style={{
-                backgroundColor: isLight ? "#f97316" : "#ea580c", 
+                backgroundColor: "#ef4444",
                 color: "#fff",
-                borderColor: "transparent",
+                borderColor: "#ef4444",
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent";
-                (e.currentTarget as HTMLButtonElement).style.color = isLight ? "#f97316" : "#ea580c";
-                (e.currentTarget as HTMLButtonElement).style.borderColor = isLight ? "#f97316" : "#ea580c";
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.color = "#ef4444";
+                e.currentTarget.style.borderColor = "#ef4444";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.backgroundColor = isLight ? "#f97316" : "#ea580c";
-                (e.currentTarget as HTMLButtonElement).style.color = "#fff";
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "transparent";
+                e.currentTarget.style.backgroundColor = "#ef4444";
+                e.currentTarget.style.color = "#fff";
+                e.currentTarget.style.borderColor = "#ef4444";
               }}
             >
               Enviar
@@ -106,7 +106,7 @@ export default function Contact() {
 
         <div className="space-y-8">
           <div>
-            <h2 className="text-3xl font-bold mb-4">Contáctanos</h2>
+            <h2 className="text-3xl font-bold mb-4 text-red-500">Contáctanos</h2>
             <p>
               También puedes comunicarte con nosotros directamente por teléfono o correo.
             </p>
@@ -114,9 +114,9 @@ export default function Contact() {
 
           {contactDetails.map(({ icon: Icon, title, value }) => (
             <div className="flex items-start gap-4" key={title}>
-              <Icon className="h-6 w-6" style={{ color: "#ff6600" }} />
+              <Icon className="h-6 w-6" style={{ color: "#ef4444" }} />
               <div>
-                <h3 className="font-semibold">{title}</h3>
+                <h3 className="font-semibold text-red-500">{title}</h3>
                 <p>{value}</p>
               </div>
             </div>

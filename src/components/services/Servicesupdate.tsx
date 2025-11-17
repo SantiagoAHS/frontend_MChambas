@@ -31,7 +31,6 @@ export default function ServicesUpdate({ serviceId }: Props) {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    // Cargar datos existentes del servicio para actualizar
     async function fetchService() {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -131,8 +130,8 @@ export default function ServicesUpdate({ serviceId }: Props) {
     <div className="max-w-xl mx-auto p-6 bg-white rounded shadow">
       <h2 className="text-2xl mb-4 font-bold">Actualizar Servicio</h2>
 
-      {error && <p className="text-red-600 mb-4">{error}</p>}
-      {success && <p className="text-green-600 mb-4">Servicio actualizado con éxito</p>}
+      {error && <p className="text-red-500 mb-4">{error}</p>}
+      {success && <p className="text-green-500 mb-4">Servicio actualizado con éxito</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <input

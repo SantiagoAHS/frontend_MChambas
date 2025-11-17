@@ -1,4 +1,3 @@
-// app/login/page.tsx
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
@@ -43,37 +42,39 @@ export default function LoginPage() {
     }
   };
 
-  // Estilos dinámicos por tema
-  const bg = isDark ? "bg-[#1f1f1f]" : "bg-white";
-  const cardBg = isDark ? "bg-[#2a2a2a]" : "bg-white";
-  const text = isDark ? "text-gray-100" : "text-gray-800";
-  const labelText = isDark ? "text-gray-300" : "text-gray-700";
-  const input =
-    isDark
-      ? "bg-[#3a3a3a] text-white border-purple-600"
-      : "bg-white text-gray-800 border-green-600";
+  const bg = isDark ? "bg-[#3a3a3a]" : "bg-white";
+  const cardBg = isDark ? "bg-[#1e1e1e]" : "bg-white";
+  const text = "text-red-500";
+  const labelText = "text-red-500";
 
-  const focusRing = isDark
-    ? "focus:ring-purple-600"
-    : "focus:ring-green-600";
+  const input = isDark
+    ? "bg-[#2a2a2a] text-white border-red-500"
+    : "bg-white text-gray-800 border-red-500";
+
+  const focusRing = "focus:ring-red-500";
 
   const button = isDark
-    ? "bg-purple-600 text-white border-purple-600 hover:bg-white hover:text-purple-600"
-    : "bg-green-600 text-white border-green-600 hover:bg-white hover:text-green-600";
+    ? "bg-red-500 text-white border-red-500 hover:bg-[#2a2a2a] hover:text-red-500"
+    : "bg-red-500 text-white border-red-500 hover:bg-white hover:text-red-500";
 
   return (
-    <main className={`w-screen h-screen flex items-center justify-center transition-colors duration-300 ${bg}`}>
-      <div className={`w-full max-w-md p-8 rounded-2xl shadow-lg border-4 transition-all duration-300 
-        ${cardBg} 
-        ${isDark ? "border-purple-600" : "border-green-600"}`}>
-
+    <main
+      className={`w-screen h-screen flex items-center justify-center transition-colors duration-300 ${bg}`}
+    >
+      <div
+        className={`w-full max-w-md p-8 rounded-2xl shadow-lg border-4 transition-all duration-300 
+        ${cardBg} border-red-500`}
+      >
         <h2 className={`text-3xl font-bold text-center mb-6 ${text}`}>
           Iniciar Sesión
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className={`block text-sm font-medium mb-1 ${labelText}`}>
+            <label
+              htmlFor="email"
+              className={`block text-sm font-medium mb-1 ${labelText}`}
+            >
               Correo electrónico
             </label>
             <input
@@ -88,7 +89,10 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className={`block text-sm font-medium mb-1 ${labelText}`}>
+            <label
+              htmlFor="password"
+              className={`block text-sm font-medium mb-1 ${labelText}`}
+            >
               Contraseña
             </label>
             <input
@@ -114,7 +118,7 @@ export default function LoginPage() {
 
         <p className={`mt-6 text-center text-sm ${labelText}`}>
           ¿No tienes una cuenta?{" "}
-          <Link href="/register" className="text-orange-600 hover:underline">
+          <Link href="/register" className="text-red-500 hover:underline">
             Regístrate
           </Link>
         </p>

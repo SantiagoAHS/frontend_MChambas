@@ -32,7 +32,6 @@ export default function MyOrderDetailPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // Colores dinámicos según el tema
   const containerClasses =
     theme === "dark"
       ? "bg-[#1f1f1f] text-gray-100 border-purple-600"
@@ -86,7 +85,6 @@ export default function MyOrderDetailPage() {
         </div>
       )}
 
-      {/* Mensaje si está completado */}
       {order.estado === "completado" && (
         <div
           className={`mt-4 p-4 rounded-lg border-l-4 ${
@@ -102,7 +100,6 @@ export default function MyOrderDetailPage() {
         </div>
       )}
 
-      {/* Contenedor de seguridad / advertencias */}
       <div
         className={`mt-6 p-4 rounded-lg border-l-4 ${
           theme === "dark"

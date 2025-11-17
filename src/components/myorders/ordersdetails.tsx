@@ -52,12 +52,15 @@ const OrdersDetails: React.FC = () => {
     return <p style={{ textAlign: "center" }}>Cargando pedidos...</p>;
   }
 
-  const background = isLight ? "#f9f9f9" : "#1e1e1e";
-  const border = isLight ? "#ddd" : "#444";
-  const text = isLight ? "#111" : "#ddd";
-  const secondaryText = isLight ? "#555" : "#aaa";
-  const buttonBg = "#ff6600";
-  const buttonHover = isLight ? "#ffffff" : "#222";
+  const background = isLight ? "#f2f2f2" : "#1f1f1f";
+  const cardBg = isLight ? "#ffffff" : "#2a2a2a";
+
+  const border = isLight ? "#ccc" : "#444";
+  const text = isLight ? "#111" : "#e2e2e2";
+  const secondaryText = isLight ? "#666" : "#bbb";
+
+  const buttonBg = "#e60000";
+  const buttonHover = isLight ? "#ffffff" : "#2c2c2c";
   const buttonText = "#ffffff";
 
   return (
@@ -65,9 +68,9 @@ const OrdersDetails: React.FC = () => {
       style={{
         width: "100%",
         padding: "20px",
-        backgroundColor: isLight ? "#ffffff" : "#3a3a3a",
+        backgroundColor: background,
         color: text,
-        transition: "background-color 0.3s, color 0.3s",
+        transition: "0.3s ease",
       }}
     >
       <h1
@@ -75,7 +78,8 @@ const OrdersDetails: React.FC = () => {
           textAlign: "center",
           marginBottom: "24px",
           fontSize: "20px",
-          color: "#ff6600",
+          color: "#e60000",
+          fontWeight: "bold",
         }}
       >
         Servicios Pedidos
@@ -94,7 +98,7 @@ const OrdersDetails: React.FC = () => {
                 borderRadius: "10px",
                 padding: "16px",
                 marginBottom: "16px",
-                background: background,
+                background: cardBg,
                 boxShadow: isLight
                   ? "0 2px 4px rgba(0,0,0,0.05)"
                   : "0 2px 4px rgba(0,0,0,0.3)",
@@ -102,27 +106,36 @@ const OrdersDetails: React.FC = () => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 gap: "12px",
-                transition: "background-color 0.3s, border 0.3s",
+                transition: "0.3s",
               }}
             >
               <div style={{ flexGrow: 1 }}>
-                <div style={{ fontWeight: "bold", marginBottom: "4px" }}>
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    marginBottom: "4px",
+                    color: "#e60000",
+                  }}
+                >
                   {order.servicio_detalle?.title || "Título no disponible"}
                 </div>
                 <div style={{ color: secondaryText }}>
-                  Fecha: {new Date(order.fecha).toLocaleDateString()} | Estado: {order.estado} | Precio: ${order.total}
+                  Fecha: {new Date(order.fecha).toLocaleDateString()} | Estado:{" "}
+                  {order.estado} | Precio: ${order.total}
                 </div>
               </div>
+
               <button
                 onClick={() => handleViewDetails(order.id)}
                 style={{
                   background: buttonBg,
                   color: buttonText,
-                  border: "none",
+                  border: "1px solid transparent",
                   borderRadius: "6px",
                   padding: "8px 12px",
                   cursor: "pointer",
-                  transition: "background 0.3s, color 0.3s",
+                  fontWeight: "bold",
+                  transition: "0.2s ease",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = buttonHover;
@@ -132,7 +145,7 @@ const OrdersDetails: React.FC = () => {
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = buttonBg;
                   e.currentTarget.style.color = buttonText;
-                  e.currentTarget.style.border = "none";
+                  e.currentTarget.style.border = "1px solid transparent";
                 }}
               >
                 Ver detalles

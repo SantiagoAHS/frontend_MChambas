@@ -38,24 +38,19 @@ export default function CheckoutForm({ userName, onSubmit }: CheckoutFormProps) 
     onSubmit(formData);
   }
 
-  // Bordes con color (como en el primer código)
-  const borderColor = isDark
-    ? "border-purple-600 focus:border-purple-600 focus:ring-purple-600"
-    : "border-green-600 focus:border-green-600 focus:ring-green-600";
+  const borderColor = "border-red-600 focus:border-red-600 focus:ring-red-600";
 
-  // Botón original del segundo código
   const button = isDark
-    ? "bg-purple-600 text-white border-purple-600 hover:bg-white hover:text-purple-600"
-    : "bg-green-600 text-white border-green-600 hover:bg-white hover:text-green-600";
+    ? "bg-red-500 text-white border-red-500 hover:bg-[#2a2a2a] hover:text-red-500"
+    : "bg-red-500 text-white border-red-500 hover:bg-white hover:text-red-500";
 
-  // Colores de fondo/texto de inputs y contenedor
   const inputBase = isDark
     ? "bg-[#1f1f1f] text-white border-gray-500"
     : "bg-white text-gray-800 border-gray-300";
 
   const container = isDark
     ? "bg-[#2a2a2a] border-gray-600 text-white"
-    : "bg-white border-gray-300 text-gray-800";
+    : "bg-gray-50 border-gray-300 text-gray-800";
 
   return (
     <form

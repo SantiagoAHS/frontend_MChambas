@@ -13,9 +13,11 @@ const SidebarFilters = ({ onFilterChange, locations = [] }: SidebarFiltersProps)
   const { theme } = useTheme();
   const isLight = theme === "light";
 
-  const borderColor = isLight ? "#22c55e" : "#9333ea";
+  const red = "#ef4444"; 
+
   const bgColor = isLight ? "#ffffff" : "#1f1f1f";
-  const textColor = isLight ? "#000000" : "#e5e5e5";
+  const textColor = isLight ? "#1f1f1f" : "#e5e5e5";
+  const inputBg = isLight ? "#f9f9f9" : "#2b2b2b";
 
   const [location, setLocation] = useState("");
   const [verified, setVerified] = useState(false);
@@ -36,73 +38,77 @@ const SidebarFilters = ({ onFilterChange, locations = [] }: SidebarFiltersProps)
       <div
         className="rounded-lg p-4 space-y-6"
         style={{
-          border: `2px solid ${borderColor}`,
+          border: `2px solid ${red}`,
           backgroundColor: bgColor,
           color: textColor,
         }}
       >
-        <h3 className="font-semibold text-lg">Filtros</h3>
+        <h3 className="font-semibold text-lg text-red-500">Filtros</h3>
 
-        {/* Ubicación */}
         <div>
-          <label className="text-sm font-medium block mb-1">Ubicación</label>
+          <label className="text-sm font-medium block mb-1 text-red-500">Ubicación</label>
           <select
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             className="w-full rounded px-2 py-1 text-sm"
             style={{
-              border: `1px solid ${borderColor}`,
-              backgroundColor: isLight ? "#f9f9f9" : "#2b2b2b",
+              border: `1px solid ${red}`,
+              backgroundColor: inputBg,
               color: textColor,
             }}
           >
             <option value="">Todas las ubicaciones</option>
             {locations.map((loc) => (
-              <option key={loc} value={loc}>{loc}</option>
+              <option key={loc} value={loc}>
+                {loc}
+              </option>
             ))}
           </select>
         </div>
 
-        <hr style={{ borderColor }} />
+        <hr style={{ borderColor: red }} />
 
-        {/* Solo verificados */}
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
             checked={verified}
             onChange={(e) => setVerified(e.target.checked)}
-            style={{ accentColor: borderColor }}
+            style={{ accentColor: "#22c55e" }} 
           />
-          <label className="text-sm" style={{ color: textColor }}>Solo verificados</label>
+          <label className="text-sm">Solo verificados</label>
         </div>
 
-        <hr style={{ borderColor }} />
+        <hr style={{ borderColor: red }} />
 
-        {/* Precio */}
         <div>
-          <label className="text-sm font-medium block mb-1">Precio</label>
-          <div className="space-y-2 text-sm" style={{ color: textColor }}>
-            <div>
-              <input type="radio" name="price" value="<15000" checked={priceRange === "<15000"} onChange={(e) => setPriceRange(e.target.value)} style={{ accentColor: borderColor }} /> Menos de $15.000
-            </div>
-            <div>
-              <input type="radio" name="price" value="15000-25000" checked={priceRange === "15000-25000"} onChange={(e) => setPriceRange(e.target.value)} style={{ accentColor: borderColor }} /> $15.000 - $25.000
-            </div>
-            <div>
-              <input type="radio" name="price" value="25000-35000" checked={priceRange === "25000-35000"} onChange={(e) => setPriceRange(e.target.value)} style={{ accentColor: borderColor }} /> $25.000 - $35.000
-            </div>
-            <div>
-              <input type="radio" name="price" value=">35000" checked={priceRange === ">35000"} onChange={(e) => setPriceRange(e.target.value)} style={{ accentColor: borderColor }} /> Más de $35.000
-            </div>
+          <label className="text-sm font-medium block mb-1 text-red-500">Precio</label>
+          <div className="space-y-2 text-sm">
+            {[
+              ["<15000", "Menos de $15.000"],
+              ["15000-25000", "$15.000 - $25.000"],
+              ["25000-35000", "$25.000 - $35.000"],
+              [">35000", "Más de $35.000"],
+            ].map(([value, label]) => (
+              <div key={value}>
+                <input
+                  type="radio"
+                  name="price"
+                  value={value}
+                  checked={priceRange === value}
+                  onChange={(e) => setPriceRange(e.target.value)}
+                  style={{ accentColor: red }}
+                />{" "}
+                {label}
+              </div>
+            ))}
           </div>
         </div>
 
-        <hr style={{ borderColor }} />
+        <hr style={{ borderColor: red }} />
 
-        {/* Calificación */}
         <div>
-          <label className="text-sm font-medium block mb-1">Calificación</label>
-          <div className="space-y-2 text-sm" style={{ color: textColor }}>
+          <label className="text-sm font-medium block mb-1 text-red-500">Calificación</label>
+          <div className="space-y-2 text-sm">
             {[0, 1, 2, 3, 4, 5].reverse().map((rating) => (
               <div key={rating} className="flex items-center space-x-2">
                 <input
@@ -111,8 +117,9 @@ const SidebarFilters = ({ onFilterChange, locations = [] }: SidebarFiltersProps)
                   value={rating}
                   checked={minRating === rating}
                   onChange={() => setMinRating(rating)}
-                  style={{ accentColor: borderColor }}
+                  style={{ accentColor: red }}
                 />
+
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <Star
@@ -123,6 +130,7 @@ const SidebarFilters = ({ onFilterChange, locations = [] }: SidebarFiltersProps)
                     />
                   ))}
                 </div>
+
                 <span>
                   {rating === 0
                     ? "Sin calificación"
@@ -135,10 +143,9 @@ const SidebarFilters = ({ onFilterChange, locations = [] }: SidebarFiltersProps)
           </div>
         </div>
 
-        {/* Botón aplicar */}
         <button
           className="mt-2 px-4 py-2 rounded text-white"
-          style={{ backgroundColor: borderColor }}
+          style={{ backgroundColor: red }}
           onClick={handleApplyFilters}
         >
           Aplicar filtros
