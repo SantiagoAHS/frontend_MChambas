@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useTheme } from "@/context/ThemeContext"; // Importamos el theme
+import { useTheme } from "@/context/ThemeContext";
 
 interface ServicioDetalle {
   title: string;
@@ -33,7 +33,7 @@ export default function ContractDetailPage() {
   const [loading, setLoading] = useState(true);
   const [newStatus, setNewStatus] = useState("");
 
-  const { theme } = useTheme(); // Obtenemos el tema actual
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (!id) return;
@@ -45,20 +45,16 @@ export default function ContractDetailPage() {
     }
 
     fetch(`https://mibackend-mchambas.onrender.com/api/ventas/mis-ventas/${id}/`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
+      headers: { Authorization: `Token ${token}` },
     })
       .then(async (res) => {
         if (res.ok) {
           const data = await res.json();
           setContract(data);
           setNewStatus(data.estado);
-        } else {
-          console.error("Error al cargar detalle del contrato");
         }
       })
-      .catch((err) => console.error("Error de red:", err))
+      .catch((err) => console.error("Error:", err))
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -86,9 +82,9 @@ export default function ContractDetailPage() {
     if (response.ok) {
       const updatedContract = await response.json();
       setContract(updatedContract);
-      alert("Estado actualizado correctamente");
+      alert("Estado actualizado");
     } else {
-      alert("Error al actualizar el estado");
+      alert("Error al actualizar");
     }
   };
 
@@ -104,37 +100,46 @@ export default function ContractDetailPage() {
     );
   }
 
-  // Clases dinámicas por tema
-  const containerClasses =
+  // 🎨 Fondo gris/blanco, acentos rojos
+  const container =
     theme === "dark"
-      ? "bg-[#1f1f1f] text-white border-purple-500"
-      : "bg-white text-gray-800 border-green-500";
+      ? "bg-[#1f1f1f] text-white border-red-600"
+      : "bg-white text-gray-800 border-red-600";
+
+  const selectStyle =
+    theme === "dark"
+      ? "bg-[#2a2a2a] text-white border-red-600"
+      : "bg-white text-black border-red-600";
+
+  const button =
+    theme === "dark"
+      ? "bg-red-600 hover:bg-red-700 text-white"
+      : "bg-red-600 hover:bg-red-700 text-white";
 
   return (
     <section
-      className={`max-w-3xl mx-auto p-6 rounded shadow border transition-colors duration-300 ${containerClasses}`}
+      className={`max-w-3xl mx-auto p-6 rounded shadow border transition-colors duration-300 ${container}`}
     >
-      <h1 className="text-2xl font-bold mb-4">
+      <h1 className="text-2xl font-bold mb-4 text-red-600">
         {contract.servicio_detalle?.title || "Título no disponible"}
       </h1>
+
       <p>
-        <strong>Cliente:</strong> {contract.comprador}
+        <strong className="text-red-600">Cliente:</strong> {contract.comprador}
       </p>
+
       <p>
-        <strong>Fecha:</strong>{" "}
+        <strong className="text-red-600">Fecha:</strong>{" "}
         {new Date(contract.fecha).toLocaleDateString()}
       </p>
 
-      <p className="mt-2">
-        <strong>Estado:</strong>{" "}
+      <p className="mt-2 flex items-center gap-3">
+        <strong className="text-red-600">Estado:</strong>
+
         <select
           value={newStatus}
           onChange={(e) => setNewStatus(e.target.value)}
-          className={`border rounded px-2 py-1 ${
-            theme === "dark"
-              ? "bg-[#2a2a2a] text-white border-purple-500"
-              : "bg-white text-black border-green-500"
-          }`}
+          className={`border rounded px-2 py-1 ${selectStyle}`}
         >
           <option value="pendiente">Pendiente</option>
           <option value="iniciado">Iniciado</option>
@@ -142,46 +147,53 @@ export default function ContractDetailPage() {
           <option value="cancelado">Cancelado</option>
           <option value="completado">Completado</option>
         </select>
+
         <button
           onClick={handleChangeStatus}
-          className={`ml-3 px-4 py-1 rounded transition-colors ${
-            theme === "dark"
-              ? "bg-purple-500 hover:bg-purple-600 text-white"
-              : "bg-green-500 hover:bg-green-600 text-white"
-          }`}
+          className={`px-4 py-1 rounded transition-colors ${button}`}
         >
           Cambiar estado
         </button>
       </p>
 
       <p>
-        <strong>Cantidad:</strong> {contract.cantidad}
-      </p>
-      <p>
-        <strong>Total:</strong> ${contract.total}
-      </p>
-      <p>
-        <strong>Dirección:</strong> {contract.address}, {contract.city},{" "}
-        {contract.state}, {contract.postal_code}
-      </p>
-      <p>
-        <strong>Teléfono:</strong> {contract.phone}
+        <strong className="text-red-600">Cantidad:</strong> {contract.cantidad}
       </p>
 
-      {/* Contenedor de reglas / seguridad */}
+      <p>
+        <strong className="text-red-600">Total:</strong> ${contract.total}
+      </p>
+
+      <p>
+        <strong className="text-red-600">Dirección:</strong>{" "}
+        {contract.address}, {contract.city}, {contract.state},{" "}
+        {contract.postal_code}
+      </p>
+
+      <p>
+        <strong className="text-red-600">Teléfono:</strong> {contract.phone}
+      </p>
+
+      {/* 🔥 Caja informativa con bordes rojos */}
       <div
         className={`mt-6 p-4 rounded-lg border-l-4 ${
           theme === "dark"
-            ? "bg-[#2a2a2a] border-orange-500 text-gray-200"
-            : "bg-orange-50 border-orange-500 text-gray-800"
+            ? "bg-[#2a2a2a] border-red-500 text-gray-200"
+            : "bg-gray-100 border-red-500 text-gray-800"
         }`}
       >
-        <h3 className="font-semibold mb-2">Reglas de pago y seguridad</h3>
+        <h3 className="font-semibold mb-2 text-red-600">
+          Reglas de pago y seguridad
+        </h3>
+
         <ul className="list-disc pl-5 space-y-1 text-sm">
-          <li>El pago se registra pero no se entrega al vendedor hasta que el servicio esté completado.</li>
-          <li>Si el vendedor cancela la transacción, el pago será reembolsado automáticamente.</li>
-          <li>Si el vendedor no responde en un tiempo razonable, el dinero será regresado.</li>
-          <li>Para más información o soporte, contacta a <strong>soporte@mrchambasmx.com</strong>.</li>
+          <li>El pago se libera solo cuando el servicio se completa.</li>
+          <li>Si el vendedor cancela, se realiza reembolso automático.</li>
+          <li>Si no responde, el dinero regresa al comprador.</li>
+          <li>
+            Para soporte, escribe a{" "}
+            <strong className="text-red-600">soporte@mrchambasmx.com</strong>.
+          </li>
         </ul>
       </div>
     </section>

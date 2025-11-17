@@ -118,69 +118,62 @@ export default function CheckoutPage() {
   return (
     <div
       className={`p-6 min-h-screen transition-colors duration-300 ${
-        theme === "dark" ? "bg-[#3a3a3a] text-white" : "bg-gray-50 text-black"
+        theme === "dark" ? "bg-[#1e1e1e] text-red-300" : "bg-gray-50 text-red-700"
       }`}
     >
-      <h1 className="text-2xl font-bold mb-6 text-orange-600">
-        Contratar Servicio
-      </h1>
+      <h1 className="text-2xl font-bold mb-6 text-red-600">Contratar Servicio</h1>
 
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Detalles del Servicio */}
         <div className="md:w-3/5 flex flex-col gap-4">
+
           <div
             className={`p-6 rounded-lg shadow transition-all duration-300 border ${
               theme === "dark"
-                ? "bg-[#2a2a2a] border-[#2a2a2a]"
-                : "bg-white border-gray-200"
+                ? "bg-[#2a2a2a] border-red-600 text-red-300"
+                : "bg-white border-red-500 text-red-700"
             }`}
           >
-            <h2 className="text-xl font-semibold mb-4 text-orange-600">
+            <h2 className="text-xl font-semibold mb-4 text-red-600">
               Detalles del Servicio
             </h2>
-            <p>
-              <strong>Servicio:</strong> {service.title}
-            </p>
-            <p>
-              <strong>Precio:</strong> {service.price}
-            </p>
-            <p>
-              <strong>Proveedor:</strong> {service.provider.nombre}
-            </p>
+
+            <p><strong>Servicio:</strong> {service.title}</p>
+            <p><strong>Precio:</strong> {service.price}</p>
+            <p><strong>Proveedor:</strong> {service.provider.nombre}</p>
+
             {service.image && (
               <img
                 src={`https://mibackend-mchambas.onrender.com${service.image}`}
                 alt={service.title}
-                className="mt-4 w-full h-48 object-cover rounded"
+                className="mt-4 w-full h-48 object-cover rounded border border-red-500"
               />
             )}
           </div>
-          {/* Mensaje de seguridad */}
+
           <div
             className={`mt-4 p-4 rounded-lg border-l-4 ${
               theme === "dark"
-                ? "bg-[#2a2a2a] border-orange-500 text-gray-200"
-                : "bg-orange-50 border-orange-500 text-gray-800"
+                ? "bg-[#2a2a2a] border-red-500 text-red-300"
+                : "bg-gray-100 border-red-500 text-red-700"
             }`}
           >
             <h3 className="font-semibold mb-2">Pago protegido</h3>
             <ul className="list-disc pl-5 space-y-1 text-sm">
-              <li>Si el vendedor cancela la transacción, tu pago será reembolsado automáticamente.</li>
-              <li>Si el vendedor no responde en un tiempo razonable, tu dinero será regresado.</li>
-              <li>Para más información o soporte, contacta a <strong>soporte@tuservicio.com</strong>.</li>
+              <li>Si el vendedor cancela, te reembolsamos automáticamente.</li>
+              <li>Si no responde, tu pago regresa a tu cuenta.</li>
+              <li>Para soporte: <strong>soporte@tuservicio.com</strong></li>
             </ul>
           </div>
         </div>
 
-        {/* Checkout y Tarjeta Seleccionada */}
         <div
           className={`md:w-2/5 p-6 rounded-lg shadow transition-all duration-300 border ${
             theme === "dark"
-              ? "bg-[#2e2e2e] border-gray-600"
-              : "bg-gray-100 border-gray-200"
+              ? "bg-[#2e2e2e] border-red-500 text-red-300"
+              : "bg-gray-100 border-red-500 text-red-700"
           }`}
         >
-          <h2 className="text-xl font-semibold mb-4 text-orange-600">
+          <h2 className="text-xl font-semibold mb-4 text-red-600">
             Completar Datos
           </h2>
 
@@ -188,24 +181,25 @@ export default function CheckoutPage() {
             <div
               className={`mb-4 p-4 border rounded ${
                 theme === "dark"
-                  ? "bg-[#1f1f1f] border-gray-600 text-white"
-                  : "bg-white border-gray-300 text-black"
+                  ? "bg-[#1f1f1f] border-red-600 text-red-300"
+                  : "bg-white border-red-500 text-red-700"
               }`}
             >
               <p>
-                <strong>Tarjeta seleccionada:</strong> {tarjetaSeleccionada.nombre_titular}
+                <strong>Tarjeta seleccionada:</strong>{" "}
+                {tarjetaSeleccionada.nombre_titular}
               </p>
               <p>
                 {tarjetaSeleccionada.numero_enmascarado} - Expira{" "}
                 {String(tarjetaSeleccionada.exp_mes).padStart(2, "0")}/
                 {String(tarjetaSeleccionada.exp_ano).slice(-2)}
               </p>
-              <p className="mt-2 text-sm text-gray-500">
-                Pago simulado: no se realizará ningún cargo.
+              <p className="mt-2 text-sm text-red-500">
+                Pago simulado: no se realizará ningún cargo real.
               </p>
             </div>
           ) : (
-            <p className="mb-4">No tienes ninguna tarjeta por defecto</p>
+            <p className="mb-4">No tienes una tarjeta por defecto</p>
           )}
 
           <CheckoutForm userName={userName} onSubmit={handleSubmitCheckout} />

@@ -12,11 +12,18 @@ export default function ServiceDetailPage() {
   const [error, setError] = useState(false);
   const { theme } = useTheme();
 
+  const isDark = theme === "dark";
+
+  const button = isDark
+    ? "bg-red-500 text-white border-red-500 hover:bg-[#2a2a2a] hover:text-red-500"
+    : "bg-red-500 text-white border-red-500 hover:bg-white hover:text-red-500";
+
   useEffect(() => {
     async function fetchService() {
-      const res = await fetch(`https://mibackend-mchambas.onrender.com/api/services/${id}/`, {
-        cache: "no-store",
-      });
+      const res = await fetch(
+        `https://mibackend-mchambas.onrender.com/api/services/${id}/`,
+        { cache: "no-store" }
+      );
 
       if (!res.ok) {
         setError(true);
@@ -38,29 +45,35 @@ export default function ServiceDetailPage() {
     }
 
     try {
-      const res = await fetch("https://mibackend-mchambas.onrender.com/api/chats/create/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
-        body: JSON.stringify({ other_user_id: service.provider.id }),
-      });
+      const res = await fetch(
+        "https://mibackend-mchambas.onrender.com/api/chats/create/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${token}`,
+          },
+          body: JSON.stringify({ other_user_id: service.provider.id }),
+        }
+      );
 
       if (!res.ok) throw new Error("No se pudo crear el chat");
 
       const chat = await res.json();
 
-      await fetch(`https://mibackend-mchambas.onrender.com/api/chats/${chat.id}/send/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
-        body: JSON.stringify({
-          content: "Hola, estoy interesado en tu servicio",
-        }),
-      });
+      await fetch(
+        `https://mibackend-mchambas.onrender.com/api/chats/${chat.id}/send/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${token}`,
+          },
+          body: JSON.stringify({
+            content: "Hola, estoy interesado en tu servicio",
+          }),
+        }
+      );
 
       router.push("/chat");
     } catch (err) {
@@ -81,8 +94,8 @@ export default function ServiceDetailPage() {
       <div
         className={`max-w-3xl mx-auto p-6 rounded shadow border ${
           theme === "dark"
-            ? "bg-[#2b2b2b] border-gray-600"
-            : "bg-white border-gray-200"
+            ? "bg-[#2b2b2b] border-red-500"
+            : "bg-white border-red-500"
         }`}
       >
         <h1 className="text-3xl font-bold mb-2">{service.title}</h1>
@@ -128,22 +141,14 @@ export default function ServiceDetailPage() {
         <div className="flex gap-4">
           <button
             onClick={handleContact}
-            className={`px-4 py-2 rounded font-semibold transition ${
-              theme === "dark"
-                ? "bg-green-700 hover:bg-green-800 text-white"
-                : "bg-green-600 hover:bg-green-700 text-white"
-            }`}
+            className={`px-4 py-2 rounded font-semibold border-2 transition ${button}`}
           >
             Contactar
           </button>
 
           <button
             onClick={() => router.push(`/payments/checkout/${id}`)}
-            className={`px-4 py-2 rounded font-semibold transition ${
-              theme === "dark"
-                ? "bg-blue-700 hover:bg-blue-800 text-white"
-                : "bg-blue-600 hover:bg-blue-700 text-white"
-            }`}
+            className={`px-4 py-2 rounded font-semibold border-2 transition ${button}`}
           >
             Contratar
           </button>

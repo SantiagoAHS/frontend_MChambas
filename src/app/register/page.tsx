@@ -19,17 +19,20 @@ export default function RegisterPage() {
     }
 
     try {
-      const response = await fetch("https://mibackend-mchambas.onrender.com/api/user/register/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nombre: name,
-          email,
-          password,
-        }),
-      });
+      const response = await fetch(
+        "https://mibackend-mchambas.onrender.com/api/user/register/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nombre: name,
+            email,
+            password,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -57,21 +60,22 @@ export default function RegisterPage() {
       <div
         className={`w-full max-w-md rounded-xl shadow-lg p-8 border-2 ${
           isDark
-            ? "bg-zinc-900 border-purple-500"
-            : "bg-white border-green-500"
+            ? "bg-[#1e1e1e] border-red-500"
+            : "bg-white border-red-500"
         }`}
       >
         <h2
-          className={`text-3xl font-bold text-center mb-6 ${
-            isDark ? "text-white" : "text-gray-800"
-          }`}
+          className={`text-3xl font-bold text-center mb-6 text-red-500`}
         >
           Crear una cuenta
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium mb-1">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium mb-1 text-red-500"
+            >
               Nombre
             </label>
             <input
@@ -82,15 +86,18 @@ export default function RegisterPage() {
               required
               className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                 isDark
-                  ? "bg-zinc-800 text-white border-purple-500 focus:ring-purple-500"
-                  : "bg-white text-gray-800 border-green-500 focus:ring-green-500"
+                  ? "bg-[#2a2a2a] text-white border-red-500 focus:ring-red-500"
+                  : "bg-white text-gray-800 border-red-500 focus:ring-red-500"
               }`}
               placeholder="Nombre"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium mb-1 text-red-500"
+            >
               Correo electrónico
             </label>
             <input
@@ -101,15 +108,18 @@ export default function RegisterPage() {
               required
               className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                 isDark
-                  ? "bg-zinc-800 text-white border-purple-500 focus:ring-purple-500"
-                  : "bg-white text-gray-800 border-green-500 focus:ring-green-500"
+                  ? "bg-[#2a2a2a] text-white border-red-500 focus:ring-red-500"
+                  : "bg-white text-gray-800 border-red-500 focus:ring-red-500"
               }`}
               placeholder="ejemplo@correo.com"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-1">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium mb-1 text-red-500"
+            >
               Contraseña
             </label>
             <input
@@ -120,15 +130,18 @@ export default function RegisterPage() {
               required
               className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                 isDark
-                  ? "bg-zinc-800 text-white border-purple-500 focus:ring-purple-500"
-                  : "bg-white text-gray-800 border-green-500 focus:ring-green-500"
+                  ? "bg-[#2a2a2a] text-white border-red-500 focus:ring-red-500"
+                  : "bg-white text-gray-800 border-red-500 focus:ring-red-500"
               }`}
               placeholder="••••••••"
             />
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium mb-1 text-red-500"
+            >
               Confirmar contraseña
             </label>
             <input
@@ -139,8 +152,8 @@ export default function RegisterPage() {
               required
               className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                 isDark
-                  ? "bg-zinc-800 text-white border-purple-500 focus:ring-purple-500"
-                  : "bg-white text-gray-800 border-green-500 focus:ring-green-500"
+                  ? "bg-[#2a2a2a] text-white border-red-500 focus:ring-red-500"
+                  : "bg-white text-gray-800 border-red-500 focus:ring-red-500"
               }`}
               placeholder="••••••••"
             />
@@ -148,24 +161,19 @@ export default function RegisterPage() {
 
           <button
             type="submit"
-            className={`w-full font-semibold py-2 rounded-lg transition-colors duration-200 ${
+            className={`w-full font-semibold py-2 rounded-lg border-2 transition-colors duration-200 ${
               isDark
-                ? "bg-purple-500 text-white hover:bg-white hover:text-purple-600 border border-purple-500"
-                : "bg-green-500 text-white hover:bg-white hover:text-green-600 border border-green-500"
+                ? "bg-red-500 text-white hover:bg-[#2a2a2a] hover:text-red-500 border-red-500"
+                : "bg-red-500 text-white hover:bg-white hover:text-red-500 border-red-500"
             }`}
           >
             Registrarse
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm">
+        <p className="mt-6 text-center text-sm text-red-500">
           ¿Ya tienes una cuenta?{" "}
-          <Link
-            href="/login"
-            className={`font-medium underline ${
-              isDark ? "text-purple-400 hover:text-white" : "text-green-600 hover:text-green-800"
-            }`}
-          >
+          <Link href="/login" className="text-red-500 hover:underline">
             Inicia sesión
           </Link>
         </p>

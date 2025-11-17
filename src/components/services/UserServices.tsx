@@ -29,7 +29,7 @@ export default function UserServices() {
         const res = await fetch("https://mibackend-mchambas.onrender.com/api/services/my-services/", {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Token ${token}`, // enviar token
+            Authorization: `Token ${token}`, 
           },
         });
 

@@ -11,14 +11,16 @@ export default function ServicesCatalog() {
   const [loading, setLoading] = useState(true);
   const { theme } = useTheme();
 
-  const borderColor = theme === "dark" ? "border-purple-500" : "border-green-500";
+  const borderColor = theme === "dark" ? "border-red-500" : "border-red-500";
   const bgColor = theme === "dark" ? "bg-[#3a3a3a]" : "bg-white";
   const textSecondary = theme === "dark" ? "text-gray-300" : "text-gray-500";
-  const buttonBg = theme === "dark" ? "bg-purple-600 hover:bg-purple-700" : "bg-green-500 hover:bg-green-700";
-  const gradientBg = theme === "dark" ? "from-purple-600 to-orange-600" : "from-orange-500 to-purple-600";
-  const paginationBtnBg = theme === "dark" ? "bg-purple-600" : "bg-green-600";
+  const buttonBg =
+  theme === "dark"
+    ? "bg-red-500 border border-red-500 hover:bg-[#3a3a3a] hover:border-red-500"
+    : "bg-red-500 border border-red-500 hover:bg-white hover:border-red-500 hover:text-red-500";
+  const gradientBg = theme === "dark" ? "from-red-500 to-red-600" : "from-red-600 to-red-500";
+  const paginationBtnBg = theme === "dark" ? "bg-red-500" : "bg-red-500";
 
-  // 🔹 Función para obtener servicios (con o sin filtros)
   const fetchServices = async (filters: Record<string, any> = {}) => {
     setLoading(true);
     try {
@@ -55,24 +57,20 @@ export default function ServicesCatalog() {
     }
   };
 
-  // 🔹 Obtener servicios iniciales
   useEffect(() => {
     fetchServices();
   }, []);
 
-  // 🔹 Función que pasamos al sidebar para actualizar filtros
   const handleFilterChange = (filters: Record<string, any>) => {
     fetchServices(filters);
   };
 
-  // 🔹 Obtener ubicaciones únicas para el sidebar
   const locations = Array.isArray(services)
     ? [...new Set(services.map((s) => s.location).filter(Boolean))]
     : [];
 
   return (
     <div className={`${theme === "dark" ? "bg-[#3a3a3a]" : "bg-white"} min-h-screen`}>
-      {/* Header */}
       <header className={`text-gray-400 shadow-sm border-b ${borderColor}`}>
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
           <div className="relative flex-1 max-w-2xl">
@@ -92,10 +90,8 @@ export default function ServicesCatalog() {
 
       <main className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
-          {/* Sidebar Filters */}
           <SidebarFilters onFilterChange={handleFilterChange} locations={locations} />
 
-          {/* Main Section */}
           <section className="flex-1">
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -123,16 +119,13 @@ export default function ServicesCatalog() {
               </div>
             </div>
 
-            {/* Featured Banner */}
             <div className={`bg-gradient-to-r ${gradientBg} rounded-lg p-6 mb-8 text-white`}>
               <h3 className="text-xl font-bold mb-2">🌟 Servicios Destacados</h3>
               <p className="text-blue-100">Encuentra los mejores profesionales verificados en tu área.</p>
             </div>
 
-            {/* Services Grid */}
             <ServicesGrid services={services} />
 
-            {/* Pagination */}
             <div className="flex justify-center mt-8 gap-2">
               {["Anterior", "1", "2", "3", "Siguiente"].map((label, i) => (
                 <button
@@ -145,7 +138,6 @@ export default function ServicesCatalog() {
               ))}
             </div>
 
-            {/* CTA */}
             <div className={`rounded-lg p-8 mt-8 text-center ${bgColor} border ${borderColor}`}>
               <h3 className="text-2xl font-bold mb-4">¿Eres un profesional?</h3>
               <p className={`${textSecondary} mb-6`}>

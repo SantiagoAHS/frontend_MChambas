@@ -52,7 +52,8 @@ const ServiceCard = ({ service }) => {
     }
   };
 
-  const borderColor = isLight ? "#22c55e" : "#9333ea"; // green-500 / purple-500
+  const borderColor = "#ef4444"; 
+  const accentRed = "#ef4444";
 
   return (
     <Link href={`/services/${service.id}`} className="h-full">
@@ -70,16 +71,19 @@ const ServiceCard = ({ service }) => {
             alt={service.title}
             className="w-full h-48 object-cover"
           />
+
           {service.verified && (
             <span className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
               Verificado
             </span>
           )}
         </div>
+
         <div className="p-4 flex flex-col flex-grow">
-          <h3 className="font-semibold text-lg mb-1" style={{ color: "#ff6600" }}>
+          <h3 className="font-semibold text-lg mb-1" style={{ color: accentRed }}>
             {service.title}
           </h3>
+
           <div className="flex items-center gap-2 mb-2">
             <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs">
               {service.provider?.nombre?.[0] || "?"}
@@ -88,42 +92,44 @@ const ServiceCard = ({ service }) => {
               {service.provider?.nombre || "Sin nombre"}
             </span>
           </div>
-          <p
-            className="text-sm text-gray-600 mb-3 line-clamp-3"
-            style={{ flexGrow: 1 }}
-          >
+
+          <p className="text-sm text-gray-600 mb-3 line-clamp-3" style={{ flexGrow: 1 }}>
             {service.description}
           </p>
+
           <div className="flex items-center gap-4 text-sm mb-2">
             <div className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
               <span className="font-medium">{service.rating}</span>
               <span className="text-gray-500">({service.reviews})</span>
             </div>
+
             <div className="flex items-center gap-1 text-gray-500">
               <MapPin className="w-4 h-4" />
               <span>{service.location}</span>
             </div>
           </div>
+
           <div className="flex items-center gap-1 text-sm text-gray-500 mb-4">
             <Clock className="w-4 h-4" />
             <span>Responde en {service.response_time}</span>
           </div>
+
           <div className="flex justify-between items-center mt-auto">
-            <span className="text-lg font-bold" style={{ color: "#ff6600" }}>
+            <span className="text-lg font-bold" style={{ color: accentRed }}>
               {service.price}
             </span>
+
             <button
-              onClick={handleContact}
-              className={`
-                font-semibold px-4 py-2 rounded shadow transition border-2
-                ${isLight
-                  ? "bg-green-500 text-white border-green-500 hover:bg-white hover:text-green-500"
-                  : "bg-purple-500 text-white border-purple-500 hover:bg-white hover:text-purple-500"}
-              `}
-            >
-              Contactar
-            </button>
+            onClick={handleContact}
+            className="
+              font-semibold px-4 py-2 rounded shadow transition border-2
+              bg-red-500 text-white border-red-500
+              hover:bg-white hover:text-red-500 hover:border-red-500
+            "
+          >
+            Contactar
+          </button>
           </div>
         </div>
       </div>

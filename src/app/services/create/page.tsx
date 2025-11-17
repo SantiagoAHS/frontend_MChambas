@@ -9,15 +9,16 @@ export default function CreateServicePage() {
   const isDark = theme === "dark";
 
   const bg = isDark ? "bg-[#1f1f1f]" : "bg-gray-100";
-  const text = isDark ? "text-gray-100" : "text-gray-800";
 
   return (
     <div className={`min-h-screen flex transition-colors duration-300 ${bg}`}>
       <Sidebar />
+
       <main className="flex-1 p-8">
-        <h2 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${text}`}>
+        <h2 className="text-2xl font-bold mb-6 text-red-500">
           Crear nuevo servicio
         </h2>
+
         <Servicescreate />
       </main>
     </div>

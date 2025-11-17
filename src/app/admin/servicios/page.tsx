@@ -18,11 +18,9 @@ export default function ServiciosPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Obtener token desde localStorage
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-  // 🔹 Cargar lista de servicios
   useEffect(() => {
     if (!token) return;
 
@@ -38,7 +36,6 @@ export default function ServiciosPage() {
       .finally(() => setLoading(false));
   }, [token]);
 
-  // 🔹 Cambiar estado de verificación
   const toggleVerification = async (id: number, current: boolean) => {
     if (!token) return;
 

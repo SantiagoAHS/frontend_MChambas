@@ -40,28 +40,27 @@ const Sidebar: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="fixed left-2 top-1/2 z-50 p-2 rounded-full shadow-md md:hidden"
         style={{
-          backgroundColor: isLight ? "#ffffff" : "#3a3a3a",
-          border: "1px solid #d1d5db", // gris-200
+          backgroundColor: isLight ? "#ffffff" : "#121212",
+          border: "1px solid #d1d5db",
         }}
       >
         {isOpen ? (
-          <ChevronLeft className="w-5 h-5 text-orange-500" />
+          <ChevronLeft className="w-5 h-5 text-red-500" />
         ) : (
-          <ChevronRight className="w-5 h-5 text-orange-500" />
+          <ChevronRight className="w-5 h-5 text-red-500" />
         )}
       </button>
 
-      {/* Sidebar */}
       <aside
         ref={sidebarRef}
         className={clsx(
           "fixed top-0 left-0 h-full w-64 shadow-md p-4 transition-transform duration-300 z-40",
           isLight ? "bg-white" : "bg-[#3a3a3a]",
           isOpen ? "translate-x-0" : "-translate-x-full",
-          "md:translate-x-0 md:static md:h-auto" // En escritorio siempre visible y relativo
+          "md:translate-x-0 md:static md:h-auto"
         )}
       >
-        <h2 className="text-xl font-bold text-orange-600 mb-6">Panel Usuario</h2>
+        <h2 className="text-xl font-bold text-red-500 mb-6">Panel Usuario</h2>
         <nav className="space-y-4">
           {links.map(({ href, label }) => (
             <Link
@@ -71,11 +70,11 @@ const Sidebar: React.FC = () => {
                 "block px-2 py-1 rounded transition",
                 pathname === href
                   ? isLight
-                    ? "text-orange-600 border-l-4 border-orange-600 bg-orange-50 font-semibold"
-                    : "text-orange-600 border-l-4 border-orange-600 bg-orange-900 font-semibold"
+                    ? "text-red-500 border-l-4 border-red-500 bg-red-50 font-semibold"
+                    : "text-red-500 border-l-4 border-red-500 bg-red-900 font-semibold"
                   : isLight
-                  ? "text-gray-700 hover:text-orange-600"
-                  : "text-gray-200 hover:text-orange-400"
+                  ? "text-gray-700 hover:text-red-500"
+                  : "text-gray-200 hover:text-red-400"
               )}
               onClick={() => setIsOpen(false)} // Cerrar en móvil
             >
