@@ -1,4 +1,3 @@
-// next.config.js o next.config.ts
 import withPWA from "next-pwa";
 import type { NextConfig } from "next";
 
@@ -14,10 +13,8 @@ const nextConfig: NextConfig = {
 };
 
 export default withPWA({
-  pwa: {
-    dest: "public",
-    disable: !isProd,
-    register: true,
-    skipWaiting: true,
-  },
+  dest: "public",
+  disable: !isProd,
+  register: true,
+  skipWaiting: true,
 })(nextConfig);
