@@ -1,0 +1,21 @@
+{
+  "name": "MChambas",
+  "short_name": "MChambas",
+  "description": "Aplicación de MChambas",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ff7043",
+  "theme_color": "#f44336",
+  "icons": [
+    {
+      "src": "/icons/logox192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/logox512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

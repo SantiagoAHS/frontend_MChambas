@@ -7,19 +7,29 @@ import ThemeHtmlWrapper from "./ThemeHtmlWrapper";
 
 export const metadata = {
   title: "MiProyecto",
+  description: "Aplicación PWA en Next.js",
+  manifest: "/manifest.webmanifest",
+  icons: [
+    { rel: "icon", url: "/icons/icon-192x192.png" },
+    { rel: "apple-touch-icon", url: "/icons/icon-512x512.png" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeHtmlWrapper>
-      <body className="min-h-screen flex flex-col" suppressHydrationWarning>
-        <ThemeProvider>
-          <Header />
-          <Navbar />
-          <main className="flex-1 p-6">{children}</main>
-          <Footer />
-        </ThemeProvider>
-      </body>
-    </ThemeHtmlWrapper>
+    <html lang="es">
+      <ThemeHtmlWrapper>
+        <body className="min-h-screen flex flex-col" suppressHydrationWarning>
+          <ThemeProvider>
+            <Header />
+            <Navbar />
+
+            <main className="flex-1 p-6">{children}</main>
+
+            <Footer />
+          </ThemeProvider>
+        </body>
+      </ThemeHtmlWrapper>
+    </html>
   );
 }
