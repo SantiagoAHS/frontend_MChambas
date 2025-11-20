@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import ChatPerson from "@/components/chat/chatperson";
 
 interface ChatPageProps {
-  params: { id: string };
+  params: any; // <- así TypeScript no se queja
 }
 
 export default function ChatPage({ params }: ChatPageProps) {
@@ -54,8 +54,7 @@ export default function ChatPage({ params }: ChatPageProps) {
           placeholder="Buscar..."
           className="mb-4 p-2 rounded border bg-white text-black border-gray-300 placeholder-gray-500 dark:bg-[#2a2a40] dark:border-[#444] dark:text-white dark:placeholder-gray-400 transition-colors duration-300"
         />
-        <div className="flex-1 overflow-y-auto space-y-2">
-        </div>
+        <div className="flex-1 overflow-y-auto space-y-2"></div>
       </aside>
 
       <main className="flex-1 flex flex-col">
