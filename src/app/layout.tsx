@@ -8,10 +8,10 @@ import ThemeHtmlWrapper from "./ThemeHtmlWrapper";
 export const metadata = {
   title: "MiProyecto",
   description: "Aplicación PWA en Next.js",
-  manifest: "/manifest.webmanifest",
+  manifest: "/manifest.json",
   icons: [
-    { rel: "icon", url: "/icons/icon-192x192.png" },
-    { rel: "apple-touch-icon", url: "/icons/icon-512x512.png" },
+    { rel: "icon", url: "/icons/logox192.png" },
+    { rel: "apple-touch-icon", url: "/icons/logox512.png" },
   ],
 };
 
