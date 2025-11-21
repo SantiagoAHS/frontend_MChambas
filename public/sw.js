@@ -1,7 +1,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js");
 
-// Precaching (Workbox se encargará cuando Next detecte los assets)
-workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || []);
+// 🔥 QUITAR precaching automático PARA EVITAR EL ERROR
+// workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || []);
 
 // Cache First para assets estáticos
 workbox.routing.registerRoute(
@@ -14,7 +14,7 @@ workbox.routing.registerRoute(
     plugins: [
       new workbox.expiration.ExpirationPlugin({
         maxEntries: 200,
-        maxAgeSeconds: 60 * 60 * 24 * 30, // 30 días
+        maxAgeSeconds: 60 * 60 * 24 * 30,
       }),
     ],
   })
@@ -34,7 +34,7 @@ workbox.routing.registerRoute(
   })
 );
 
-// Network First para llamadas a API
+// Network First para API
 workbox.routing.registerRoute(
   ({ url }) => url.pathname.startsWith("/api"),
   new workbox.strategies.NetworkFirst({
