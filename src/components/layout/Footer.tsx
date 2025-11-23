@@ -17,7 +17,7 @@ export default function Footer() {
           ${isLight ? "text-white" : "text-[#121212]"}
         `}
       >
-        &copy; {new Date().getFullYear()} MiProyecto. Todos los derechos reservados.
+        &copy; {new Date().getFullYear()} MrChambas. Todos los derechos reservados.
       </span>
     </footer>
   );

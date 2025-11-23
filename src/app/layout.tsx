@@ -3,9 +3,8 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { ThemeProvider } from "@/context/ThemeContext";
-import ThemeHtmlWrapper from "./ThemeHtmlWrapper";
 
-// ⬇️ AQUI IMPORTA EL REGISTRO DEL SW
+// ⬇️ Registro SW
 import SWRegister from "./sw-register";
 
 export const metadata = {
@@ -21,21 +20,17 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <ThemeHtmlWrapper>
-        <body className="min-h-screen flex flex-col" suppressHydrationWarning>
-          <ThemeProvider>
-            {/* ⬇️ REGISTRO DEL SW AQUI */}
-            <SWRegister />
+      <body className="min-h-screen flex flex-col" suppressHydrationWarning>
+        <ThemeProvider>
+          <SWRegister />
+          <Header />
+          <Navbar />
 
-            <Header />
-            <Navbar />
+          <main className="flex-1 p-6">{children}</main>
 
-            <main className="flex-1 p-6">{children}</main>
-
-            <Footer />
-          </ThemeProvider>
-        </body>
-      </ThemeHtmlWrapper>
+          <Footer />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

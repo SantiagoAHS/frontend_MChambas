@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
 
           <Link href="/">
             <span className="text-red-500 font-bold text-lg cursor-pointer">
-              MChambas
+              MrChambas
             </span>
           </Link>
         </div>
