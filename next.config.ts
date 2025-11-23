@@ -16,9 +16,8 @@ export default withPWA({
 
   runtimeCaching: [
     {
-      // ⚡ Cache de páginas y navegación
-      urlPattern: ({ request }: { request: Request }) =>
-        request.mode === "navigate",
+      // ⚡ Cache de páginas reales (incluye HOME)
+      urlPattern: /\/(.*)$/,
       handler: "NetworkFirst",
       options: {
         cacheName: "html-cache",
@@ -28,11 +27,11 @@ export default withPWA({
     },
 
     {
-      // ⚡ Cache de assets
+      // ⚡ Assets
       urlPattern: /^https?.*/,
       handler: "NetworkFirst",
       options: {
-        cacheName: "pages-cache",
+        cacheName: "assets-cache",
         expiration: {
           maxEntries: 50,
           maxAgeSeconds: 60 * 60 * 24 * 30,
@@ -42,7 +41,7 @@ export default withPWA({
     },
 
     {
-      // ⚡ Cache de API
+      // ⚡ API
       urlPattern: /\/api\/.*$/,
       handler: "NetworkFirst",
       options: {
@@ -65,8 +64,8 @@ export default withPWA({
     },
   ],
 
-  // ⚡⚡ Fallback global offline
   fallbacks: {
     document: "/offline.html",
   },
+
 })(nextConfig);
