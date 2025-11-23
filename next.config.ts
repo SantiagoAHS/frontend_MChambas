@@ -16,43 +16,30 @@ export default withPWA({
 
   runtimeCaching: [
     {
-      // ⚡ Cache de páginas reales (incluye HOME)
-      urlPattern: /\/(.*)$/,
-      handler: "NetworkFirst",
-      options: {
-        cacheName: "html-cache",
-        networkTimeoutSeconds: 3,
-        cacheableResponse: { statuses: [0, 200] },
-      },
-    },
-
-    {
-      // ⚡ Assets
+      // 🧭 Cache de páginas + rutas del App Router
       urlPattern: /^https?.*/,
       handler: "NetworkFirst",
       options: {
-        cacheName: "assets-cache",
-        expiration: {
-          maxEntries: 50,
-          maxAgeSeconds: 60 * 60 * 24 * 30,
+        cacheName: "pages-cache",
+        networkTimeoutSeconds: 3,
+        cacheableResponse: {
+          statuses: [0, 200],
         },
-        cacheableResponse: { statuses: [0, 200] },
       },
     },
 
     {
-      // ⚡ API
+      // 🟦 Cache de API
       urlPattern: /\/api\/.*$/,
       handler: "NetworkFirst",
       options: {
         cacheName: "api-cache",
-        networkTimeoutSeconds: 3,
       },
     },
 
     {
-      // ⚡ Imágenes
-      urlPattern: /\.(png|jpg|jpeg|svg|gif|webp)$/,
+      // 🖼 Cache de imágenes
+      urlPattern: /\.(png|gif|jpg|jpeg|svg|webp)$/,
       handler: "CacheFirst",
       options: {
         cacheName: "images-cache",
@@ -63,9 +50,4 @@ export default withPWA({
       },
     },
   ],
-
-  fallbacks: {
-    document: "/offline.html",
-  },
-
 })(nextConfig);
