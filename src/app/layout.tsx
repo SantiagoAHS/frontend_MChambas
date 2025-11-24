@@ -1,3 +1,4 @@
+// src/app/layout.tsx
 import "../styles/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -5,7 +6,7 @@ import Header from "@/components/layout/Header";
 import { ThemeProvider } from "@/context/ThemeContext";
 import ThemeHtmlWrapper from "./ThemeHtmlWrapper";
 
-// ⬇️ AQUI IMPORTA EL REGISTRO DEL SW
+// ⬇️ Registro del Service Worker local
 import SWRegister from "./sw-register";
 
 export const metadata = {
@@ -24,9 +25,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <ThemeHtmlWrapper>
         <body className="min-h-screen flex flex-col" suppressHydrationWarning>
           <ThemeProvider>
-            {/* ⬇️ REGISTRO DEL SW AQUI */}
+            {/* Registro del SW local */}
             <SWRegister />
 
+            {/* Layout */}
             <Header />
             <Navbar />
 
