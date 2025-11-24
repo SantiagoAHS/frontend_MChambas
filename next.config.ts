@@ -10,7 +10,8 @@ const nextConfig: NextConfig = {
 
 export default withPWA({
   dest: "public",
-  disable: !isProd,
+  // Para pruebas locales, forzamos que no se desactive
+  disable: false, 
   register: true,
   skipWaiting: true,
   runtimeCaching: [
@@ -47,7 +48,7 @@ export default withPWA({
       },
     },
   ],
-  // ⚠ El fallback solo se usará para rutas no visitadas
+  // ⚠ Este fallback se usa para rutas no visitadas antes de quedarse offline
   fallbacks: {
     document: "/offline.html",
   },
