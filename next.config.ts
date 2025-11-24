@@ -47,7 +47,8 @@ export default withPWA({
       },
     },
   ],
+  // ⚠ El fallback solo se usará para rutas no visitadas
   fallbacks: {
-    document: "/", // página inicial en offline
+    document: "/offline.html",
   },
 })(nextConfig);
