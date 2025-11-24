@@ -3,23 +3,10 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { ThemeProvider } from "@/context/ThemeContext";
-import { useEffect } from "react";
+import ThemeHtmlWrapper from "./ThemeHtmlWrapper";
 
-// ⬇️ Registro SW directamente
-function SWRegister() {
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("/sw.js")
-          .then((reg) => console.log("SW registrado:", reg))
-          .catch((err) => console.error("Error registrando SW:", err));
-      });
-    }
-  }, []);
-
-  return null;
-}
+// ⬇️ AQUI IMPORTA EL REGISTRO DEL SW
+import SWRegister from "./sw-register";
 
 export const metadata = {
   title: "MiProyecto",
@@ -34,15 +21,21 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className="min-h-screen flex flex-col" suppressHydrationWarning>
-        <ThemeProvider>
-          <SWRegister />
-          <Header />
-          <Navbar />
-          <main className="flex-1 p-6">{children}</main>
-          <Footer />
-        </ThemeProvider>
-      </body>
+      <ThemeHtmlWrapper>
+        <body className="min-h-screen flex flex-col" suppressHydrationWarning>
+          <ThemeProvider>
+            {/* ⬇️ REGISTRO DEL SW AQUI */}
+            <SWRegister />
+
+            <Header />
+            <Navbar />
+
+            <main className="flex-1 p-6">{children}</main>
+
+            <Footer />
+          </ThemeProvider>
+        </body>
+      </ThemeHtmlWrapper>
     </html>
   );
 }
