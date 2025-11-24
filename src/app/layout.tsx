@@ -3,9 +3,23 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { useEffect } from "react";
 
-// ⬇️ Registro SW
-import SWRegister from "./sw-register";
+// ⬇️ Registro SW directamente
+function SWRegister() {
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then((reg) => console.log("SW registrado:", reg))
+          .catch((err) => console.error("Error registrando SW:", err));
+      });
+    }
+  }, []);
+
+  return null;
+}
 
 export const metadata = {
   title: "MiProyecto",
@@ -25,9 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SWRegister />
           <Header />
           <Navbar />
-
           <main className="flex-1 p-6">{children}</main>
-
           <Footer />
         </ThemeProvider>
       </body>

@@ -9,18 +9,18 @@ const nextConfig: NextConfig = {
 };
 
 export default withPWA({
-  dest: "public",
-  // Para pruebas locales, forzamos que no se desactive
-  disable: false, 
-  register: true,
-  skipWaiting: true,
+  dest: "public",           // donde se generará el sw.js
+  disable: false,           // forzar que siempre esté activo
+  register: true,           // registrar automáticamente el SW
+  skipWaiting: true,        // activar SW inmediatamente
+  buildExcludes: [/middleware-manifest\.json$/], // evita conflictos en Next 15+
   runtimeCaching: [
     {
-      urlPattern: /^\/$/, // página inicial
+      urlPattern: /^\/$/,  // cachea la home
       handler: "NetworkFirst",
       options: {
         cacheName: "html-cache",
-        networkTimeoutSeconds: 3,
+        networkTimeoutSeconds: 5,
         cacheableResponse: { statuses: [0, 200] },
       },
     },
@@ -29,7 +29,7 @@ export default withPWA({
       handler: "NetworkFirst",
       options: {
         cacheName: "pages-cache",
-        networkTimeoutSeconds: 3,
+        networkTimeoutSeconds: 5,
         expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 },
         cacheableResponse: { statuses: [0, 200] },
       },
@@ -48,8 +48,7 @@ export default withPWA({
       },
     },
   ],
-  // ⚠ Este fallback se usa para rutas no visitadas antes de quedarse offline
   fallbacks: {
-    document: "/offline.html",
+    document: "/offline.html", // fallback si ruta no cacheada
   },
 })(nextConfig);
