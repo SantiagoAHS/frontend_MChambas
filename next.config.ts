@@ -15,10 +15,9 @@ export default withPWA(
     register: true,
     skipWaiting: true,
 
-    // 👇 OBLIGATORIOS EN APP ROUTER
-    sw: "sw.js",
-    swSrc: "pwa-worker.js",
-    buildExcludes: [/middleware-manifest.json$/],
+    // ❗ NO usar swSrc
+    // ❗ NO usar sw
+    // ❗ next-pwa generará automáticamente /sw.js
 
     runtimeCaching: [
       {
@@ -36,21 +35,12 @@ export default withPWA(
         urlPattern: /^https?.*/,
         handler: "NetworkFirst",
         options: {
-          cacheName: "pages-cache",
+          cacheName: "assets-cache",
           expiration: {
             maxEntries: 50,
             maxAgeSeconds: 60 * 60 * 24 * 30,
           },
           cacheableResponse: { statuses: [0, 200] },
-        },
-      },
-
-      {
-        urlPattern: /\/api\/.*$/,
-        handler: "NetworkFirst",
-        options: {
-          cacheName: "api-cache",
-          networkTimeoutSeconds: 3,
         },
       },
 
