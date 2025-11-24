@@ -9,46 +9,43 @@ const nextConfig: NextConfig = {
 };
 
 export default withPWA({
-  dest: "public",           // donde se generará el sw.js
-  disable: false,           // forzar que siempre esté activo
-  register: true,           // registrar automáticamente el SW
-  skipWaiting: true,        // activar SW inmediatamente
-  buildExcludes: [/middleware-manifest\.json$/], // evita conflictos en Next 15+
+  dest: "public",
+  disable: !isProd,
+  register: true,
+  skipWaiting: true,
   runtimeCaching: [
     {
-      urlPattern: /^\/$/,  // cachea la home
-      handler: "NetworkFirst",
-      options: {
-        cacheName: "html-cache",
-        networkTimeoutSeconds: 5,
-        cacheableResponse: { statuses: [0, 200] },
-      },
-    },
-    {
-      urlPattern: /^https?.*/,
+      urlPattern: /^https?.*/, // Cacheo de páginas y assets
       handler: "NetworkFirst",
       options: {
         cacheName: "pages-cache",
-        networkTimeoutSeconds: 5,
-        expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 },
-        cacheableResponse: { statuses: [0, 200] },
+        networkTimeoutSeconds: 3,
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 60 * 60 * 24 * 30,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
       },
     },
     {
-      urlPattern: /\/api\/.*$/,
+      urlPattern: /\/api\/.*$/, // API
       handler: "NetworkFirst",
-      options: { cacheName: "api-cache" },
+      options: {
+        cacheName: "api-cache",
+      },
     },
     {
       urlPattern: /\.(png|jpg|jpeg|svg|gif|webp)$/,
       handler: "CacheFirst",
       options: {
         cacheName: "images-cache",
-        expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
+        expiration: {
+          maxEntries: 200,
+          maxAgeSeconds: 60 * 60 * 24 * 30,
+        },
       },
     },
   ],
-  fallbacks: {
-    document: "/offline.html", // fallback si ruta no cacheada
-  },
 })(nextConfig);
