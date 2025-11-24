@@ -8,44 +8,46 @@ const nextConfig: NextConfig = {
   typescript: { ignoreBuildErrors: true },
 };
 
-export default withPWA(
-  {
-    dest: "public",
-    disable: !isProd,
-    register: true,
-    skipWaiting: true,
-
-    runtimeCaching: [
-      {
-        urlPattern: /^https?.*/, // páginas y assets
-        handler: "NetworkFirst",
-        options: {
-          cacheName: "pages-cache",
-          networkTimeoutSeconds: 3,
-          expiration: {
-            maxEntries: 50,
-            maxAgeSeconds: 60 * 60 * 24 * 30,
-          },
-          cacheableResponse: { statuses: [0, 200] },
-        },
+export default withPWA({
+  dest: "public",
+  disable: !isProd,
+  register: true,
+  skipWaiting: true,
+  runtimeCaching: [
+    {
+      urlPattern: /^\/$/, // página inicial
+      handler: "NetworkFirst",
+      options: {
+        cacheName: "html-cache",
+        networkTimeoutSeconds: 3,
+        cacheableResponse: { statuses: [0, 200] },
       },
-      {
-        urlPattern: /\/api\/.*$/, // API
-        handler: "NetworkFirst",
-        options: { cacheName: "api-cache" },
+    },
+    {
+      urlPattern: /^https?.*/,
+      handler: "NetworkFirst",
+      options: {
+        cacheName: "pages-cache",
+        networkTimeoutSeconds: 3,
+        expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 },
+        cacheableResponse: { statuses: [0, 200] },
       },
-      {
-        urlPattern: /\.(png|jpg|jpeg|svg|gif|webp)$/, // imágenes
-        handler: "CacheFirst",
-        options: {
-          cacheName: "images-cache",
-          expiration: {
-            maxEntries: 200,
-            maxAgeSeconds: 60 * 60 * 24 * 30,
-          },
-        },
+    },
+    {
+      urlPattern: /\/api\/.*$/,
+      handler: "NetworkFirst",
+      options: { cacheName: "api-cache" },
+    },
+    {
+      urlPattern: /\.(png|jpg|jpeg|svg|gif|webp)$/,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "images-cache",
+        expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
       },
-    ],
+    },
+  ],
+  fallbacks: {
+    document: "/", // página inicial en offline
   },
-  nextConfig
-);
+})(nextConfig);
