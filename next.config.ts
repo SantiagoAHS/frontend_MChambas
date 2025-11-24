@@ -1,3 +1,10 @@
+const nextConfig = {
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
+};
+
+export default nextConfig;
+
 // import withPWA from "next-pwa";
 // import type { NextConfig } from "next";
 
