@@ -13,33 +13,31 @@ export default withPWA({
   disable: !isProd,
   register: true,
   skipWaiting: true,
-
   runtimeCaching: [
     {
-      // 🧭 Cache de páginas + rutas del App Router
-      urlPattern: /^https?.*/,
+      urlPattern: /^https?.*/, // Cacheo de páginas y assets
       handler: "NetworkFirst",
       options: {
         cacheName: "pages-cache",
         networkTimeoutSeconds: 3,
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 60 * 60 * 24 * 30,
+        },
         cacheableResponse: {
           statuses: [0, 200],
         },
       },
     },
-
     {
-      // 🟦 Cache de API
-      urlPattern: /\/api\/.*$/,
+      urlPattern: /\/api\/.*$/, // API
       handler: "NetworkFirst",
       options: {
         cacheName: "api-cache",
       },
     },
-
     {
-      // 🖼 Cache de imágenes
-      urlPattern: /\.(png|gif|jpg|jpeg|svg|webp)$/,
+      urlPattern: /\.(png|jpg|jpeg|svg|gif|webp)$/,
       handler: "CacheFirst",
       options: {
         cacheName: "images-cache",
