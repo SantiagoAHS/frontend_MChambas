@@ -30,9 +30,9 @@ const ServiceCardUser = ({ service }) => {
       <Link href={`/services/${service.id}`}>
         <div className="relative cursor-pointer">
           <img
-            src={service.image || "/images/fiesta.jpg"}
+            src={service.image || "/images/servicios.png"}
             onError={(e) => {
-              e.currentTarget.src = "/images/fiesta.jpg";
+              e.currentTarget.src = "/images/servicios.png";
             }}
             alt={service.title}
             className="w-full h-48 object-cover"

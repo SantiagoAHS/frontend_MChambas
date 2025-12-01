@@ -109,9 +109,12 @@ export default function ServiceDetailPage() {
 
         {service.image && (
           <img
-            src={`https://mibackend-mchambas.onrender.com${service.image}`}
+            src={service.image || "/images/servicios.png"}
+            onError={(e) => {
+              e.currentTarget.src = "/images/servicios.png";
+            }}
             alt={service.title}
-            className="w-full h-64 object-cover rounded mb-4 border border-gray-400"
+            className="w-full h-48 object-cover"
           />
         )}
 

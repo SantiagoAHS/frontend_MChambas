@@ -67,7 +67,10 @@ const ServiceCard = ({ service }) => {
       >
         <div className="relative">
           <img
-            src={service.image || "/placeholder.svg"}
+            src={service.image || "/images/servicios.png"}
+            onError={(e) => {
+              e.currentTarget.src = "/images/servicios.png";
+            }}
             alt={service.title}
             className="w-full h-48 object-cover"
           />

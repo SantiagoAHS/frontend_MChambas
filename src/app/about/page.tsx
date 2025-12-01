@@ -82,21 +82,21 @@ export default function AboutPage() {
       title: "Nuestra Misión",
       content:
         "Crear oportunidades laborales accesibles para todos, conectando talento con empresas que valoran el crecimiento y la diversidad. En MChambas, creemos en un futuro laboral más justo e inclusivo.",
-      image: "/about/Mission.png",
+      image: "/images/Mission.png",
       reverse: false,
     },
     {
       title: "Nuestra Historia",
       content:
         "Tres amigos con experiencias frustrantes en la búsqueda de empleo decidieron crear una plataforma diferente: sin barreras, sin filtros injustos, con tecnología al servicio del talento. Así nació MChambas.",
-      image: "/about/Values.png",
+      image: "/images/Values.png",
       reverse: true,
     },
     {
       title: "Nuestra Visión",
       content:
         "Ser la comunidad laboral más confiable de Latinoamérica. Aspiramos a un mundo donde cada persona tenga acceso a un trabajo digno que reconozca su valor y potencial.",
-      image: "/about/Vision.png",
+      image: "/images/Vision.png",
       reverse: false,
     },
   ];
