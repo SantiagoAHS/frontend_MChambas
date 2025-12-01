@@ -84,17 +84,23 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                 }`}
             >
               {/* Avatar */}
-              {profile.avatar ? (
-                <img
-                  src={profile.avatar}
-                  alt="Avatar"
-                  className="w-32 h-32 rounded-full border-4 border-red-500 object-cover"
-                />
-              ) : (
-                <div className="w-32 h-32 rounded-full bg-gray-400 flex items-center justify-center text-gray-700">
-                  <UserCircleIcon className="w-20 h-20 text-red-500" />
-                </div>
-              )}
+                {profile.avatar ? (
+                  <img
+                    src={profile.avatar}
+                    alt="Avatar"
+                    className="w-32 h-32 rounded-full border-4 border-red-500 object-cover"
+                  />
+                ) : (
+                  <div
+                    className="w-32 h-32 rounded-full border-4 border-red-500 flex items-center justify-center text-white font-bold"
+                    style={{
+                      backgroundColor: "#ef4444", // rojo
+                      fontSize: "3rem",
+                    }}
+                  >
+                    {profile.nombre ? profile.nombre.charAt(0).toUpperCase() : "U"}
+                  </div>
+                )}
 
               {/* Datos */}
               <div className="flex-1 space-y-3 text-center sm:text-left">
